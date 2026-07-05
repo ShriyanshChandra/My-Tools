@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "lucide-react": "^1.23.0",
-    "qrcode.react": "^4.2.0",
+    "qr-code-styling": "^1.9.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"

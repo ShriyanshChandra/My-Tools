@@ -24,42 +24,6 @@ function Home() {
       delay: '0.1s',
       color: '#00FA9A',
       path: '/qr'
-    },
-    {
-      id: 'formatter',
-      title: 'Text Formatter',
-      desc: 'Convert, clean, and format your text with powerful regex and styling options.',
-      icon: <FileText size={28} color="var(--accent-1)" />,
-      delay: '0.2s',
-      color: 'var(--accent-1)',
-      path: '/'
-    },
-    {
-      id: 'converter',
-      title: 'Unit Converter',
-      desc: 'Quickly convert between lengths, weights, temperatures, and more instantly.',
-      icon: <Calculator size={28} color="var(--accent-3)" />,
-      delay: '0.3s',
-      color: 'var(--accent-3)',
-      path: '/'
-    },
-    {
-      id: 'password',
-      title: 'Password Generator',
-      desc: 'Create highly secure, customizable passwords that meet any requirement.',
-      icon: <Lock size={28} color="var(--accent-2)" />,
-      delay: '0.4s',
-      color: 'var(--accent-2)',
-      path: '/'
-    },
-    {
-      id: 'regex',
-      title: 'Regex Tester',
-      desc: 'Test your regular expressions against sample text in real-time.',
-      icon: <Code size={28} color="#FFD700" />,
-      delay: '0.5s',
-      color: '#FFD700',
-      path: '/'
     }
   ];
 

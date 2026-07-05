@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+import QRCodeStyling from 'qr-code-styling';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Wifi, Link2, Mail, MessageSquare, Type, Image as ImageIcon, Palette, QrCode } from 'lucide-react';
+import { ArrowLeft, Download, Wifi, Link2, Mail, MessageSquare, Type, Image as ImageIcon, Palette, QrCode, LayoutGrid } from 'lucide-react';
 import './QRGenerator.css';
 
 const QRGenerator = () => {
@@ -24,14 +24,57 @@ const QRGenerator = () => {
     // Final string passed to QRCode
     const [qrValue, setQrValue] = useState('');
 
-    // Styling states
-    const [fgColor, setFgColor] = useState('#000000');
-    const [bgColor, setBgColor] = useState('#FFFFFF');
     const [logoUrl, setLogoUrl] = useState('');
-    const [logoSize, setLogoSize] = useState(10); // 10%
+    const [logoSize, setLogoSize] = useState(15); // 15%
     const [showDomainText, setShowDomainText] = useState(true);
 
-    const canvasRef = useRef(null);
+    // Styling states
+    // Advanced Styling
+    const [dotsType, setDotsType] = useState('square');
+    const [cornersSquareType, setCornersSquareType] = useState('square');
+    const [cornersDotType, setCornersDotType] = useState('square');
+    
+    // Foreground Colors
+    const [fgColor, setFgColor] = useState('#000000');
+    const [useGradient, setUseGradient] = useState(false);
+    const [gradientColor, setGradientColor] = useState('#00d2ff');
+    const [gradientAngle, setGradientAngle] = useState(45);
+    const [fgGradientType, setFgGradientType] = useState('linear'); // 'linear', 'radial'
+
+    // Background Colors
+    const [bgColor, setBgColor] = useState('#FFFFFF');
+    const [useBgGradient, setUseBgGradient] = useState(false);
+    const [bgGradientColor, setBgGradientColor] = useState('#f0f0f0');
+    const [bgGradientAngle, setBgGradientAngle] = useState(45);
+    const [bgGradientType, setBgGradientType] = useState('linear'); // 'linear', 'radial'
+
+    const qrRef = useRef(null);
+    const qrCode = useRef(null);
+
+    // Initialize QR Code Styling instance ONCE
+    useEffect(() => {
+        qrCode.current = new QRCodeStyling({
+            width: 1024,
+            height: 1024,
+            type: 'canvas',
+            margin: 0,
+            qrOptions: {
+                errorCorrectionLevel: 'H'
+            }
+        });
+        
+        if (qrRef.current) {
+            qrCode.current.append(qrRef.current);
+            // Apply initial CSS to the injected canvas
+            const canvas = qrRef.current.querySelector('canvas');
+            if(canvas) {
+                canvas.style.width = '280px';
+                canvas.style.height = '280px';
+                canvas.style.borderRadius = '12px';
+                canvas.classList.add('qr-canvas-element');
+            }
+        }
+    }, []);
 
     // Update QR Value when inputs change
     useEffect(() => {
@@ -47,6 +90,86 @@ const QRGenerator = () => {
         
         setQrValue(val);
     }, [qrType, url, text, wifiSSID, wifiPass, wifiType, wifiHidden, emailTo, emailSub, emailBody, smsPhone, smsMsg]);
+
+    // Update the QR Code styling and data
+    useEffect(() => {
+        if (!qrCode.current) return;
+        
+        const dotsOptions = { type: dotsType };
+        if (useGradient) {
+            dotsOptions.gradient = {
+                type: fgGradientType,
+                colorStops: [
+                    { offset: 0, color: fgColor }, 
+                    { offset: 1, color: gradientColor }
+                ]
+            };
+            if (fgGradientType === 'linear') {
+                dotsOptions.gradient.rotation = (gradientAngle * Math.PI) / 180;
+            }
+        } else {
+            dotsOptions.color = fgColor;
+            // Provide a solid-color gradient to safely 'clear' any previous gradient without crashing
+            dotsOptions.gradient = {
+                type: 'linear',
+                rotation: 0,
+                colorStops: [
+                    { offset: 0, color: fgColor }, 
+                    { offset: 1, color: fgColor }
+                ]
+            };
+        }
+
+        const backgroundOptions = {};
+        if (useBgGradient) {
+            backgroundOptions.gradient = {
+                type: bgGradientType,
+                colorStops: [
+                    { offset: 0, color: bgColor }, 
+                    { offset: 1, color: bgGradientColor }
+                ]
+            };
+            if (bgGradientType === 'linear') {
+                backgroundOptions.gradient.rotation = (bgGradientAngle * Math.PI) / 180;
+            }
+        } else {
+            backgroundOptions.color = bgColor;
+            // Provide a solid-color gradient to safely 'clear' any previous gradient without crashing
+            backgroundOptions.gradient = {
+                type: 'linear',
+                rotation: 0,
+                colorStops: [
+                    { offset: 0, color: bgColor }, 
+                    { offset: 1, color: bgColor }
+                ]
+            };
+        }
+
+        qrCode.current.update({
+            data: qrValue || "https://example.com", // Prevent empty crashes
+            dotsOptions: dotsOptions,
+            backgroundOptions: backgroundOptions,
+            cornersSquareOptions: { type: cornersSquareType, color: fgColor },
+            cornersDotOptions: { type: cornersDotType, color: fgColor },
+            image: logoUrl,
+            imageOptions: {
+                crossOrigin: "anonymous",
+                margin: 10,
+                imageSize: logoSize / 100
+            }
+        });
+
+        // Ensure canvas CSS remains correct after update redraws it
+        if (qrRef.current) {
+            const canvas = qrRef.current.querySelector('canvas');
+            if(canvas) {
+                canvas.style.width = '280px';
+                canvas.style.height = '280px';
+                canvas.classList.add('qr-canvas-element');
+            }
+        }
+    }, [qrValue, fgColor, bgColor, logoUrl, logoSize, dotsType, cornersSquareType, cornersDotType, useGradient, gradientColor, gradientAngle, fgGradientType, useBgGradient, bgGradientColor, bgGradientAngle, bgGradientType]);
+
 
     const handleLogoUpload = (e) => {
         const file = e.target.files[0];
@@ -77,9 +200,6 @@ const QRGenerator = () => {
 
     // Logic to download image
     const handleDownload = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
         const canvasSize = 1024;
         const downloadCanvas = document.createElement('canvas');
         downloadCanvas.width = canvasSize;
@@ -90,7 +210,7 @@ const QRGenerator = () => {
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, canvasSize, canvasSize);
 
-        const qrCanvas = document.querySelector('.qr-canvas-element');
+        const qrCanvas = qrRef.current.querySelector('canvas');
 
         const qrSize = domain ? 800 : 880;
         const gap = domain ? 30 : 0;
@@ -120,13 +240,6 @@ const QRGenerator = () => {
         document.body.removeChild(downloadLink);
     };
 
-    const imageSettings = logoUrl ? {
-        src: logoUrl,
-        height: (logoSize / 100) * 1024,
-        width: (logoSize / 100) * 1024,
-        excavate: true, // clears background behind the logo
-    } : undefined;
-
     return (
         <>
             <div className="blob-container">
@@ -146,7 +259,7 @@ const QRGenerator = () => {
                     {/* Left Panel: Settings */}
                     <div className="qr-settings-panel glass">
                         <div className="qr-header">
-                            <h1>Pro QR Generator</h1>
+                            <h1>QR Generator</h1>
                         </div>
 
                         {/* Type Selector */}
@@ -206,23 +319,140 @@ const QRGenerator = () => {
                             )}
                         </div>
 
+                        {/* Patterns & Shapes */}
+                        <div className="design-section">
+                            <h3 className="section-title"><LayoutGrid size={18}/> Patterns & Shapes</h3>
+                            <div className="shape-selectors">
+                                <div className="shape-group">
+                                    <label>Dots Style</label>
+                                    <select className="qr-input shape-select" value={dotsType} onChange={(e) => setDotsType(e.target.value)}>
+                                        <option value="square">Square</option>
+                                        <option value="dots">Dots</option>
+                                        <option value="rounded">Rounded</option>
+                                        <option value="extra-rounded">Extra Rounded</option>
+                                        <option value="classy">Classy</option>
+                                        <option value="classy-rounded">Classy Rounded</option>
+                                    </select>
+                                </div>
+                                <div className="shape-group">
+                                    <label>Corner Squares</label>
+                                    <select className="qr-input shape-select" value={cornersSquareType} onChange={(e) => setCornersSquareType(e.target.value)}>
+                                        <option value="square">Square</option>
+                                        <option value="extra-rounded">Rounded</option>
+                                        <option value="dot">Dot</option>
+                                    </select>
+                                </div>
+                                <div className="shape-group">
+                                    <label>Corner Dots</label>
+                                    <select className="qr-input shape-select" value={cornersDotType} onChange={(e) => setCornersDotType(e.target.value)}>
+                                        <option value="square">Square</option>
+                                        <option value="dot">Dot</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Design Customization */}
                         <div className="design-section">
                             <h3 className="section-title"><Palette size={18}/> Design & Colors</h3>
-                            <div className="color-pickers">
+                            
+                            <div className="color-pickers" style={{ gridTemplateColumns: '1fr', gap: '30px' }}>
+                                {/* Foreground Colors */}
                                 <div className="color-picker-group">
-                                    <label>Foreground</label>
+                                    <label style={{fontWeight: '700', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', marginBottom: '12px'}}>Foreground</label>
                                     <div className="color-input-wrapper">
                                         <input type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} />
                                         <span>{fgColor}</span>
                                     </div>
+                                    <label className="checkbox-label" style={{marginTop: '12px'}}>
+                                        <input type="checkbox" checked={useGradient} onChange={(e) => setUseGradient(e.target.checked)} />
+                                        Use Gradient?
+                                    </label>
+                                    
+                                    {useGradient && (
+                                        <div style={{ padding: '15px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '12px' }}>
+                                            <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                            <div className="color-input-wrapper">
+                                                <input type="color" value={gradientColor} onChange={(e) => setGradientColor(e.target.value)} />
+                                                <span>{gradientColor}</span>
+                                            </div>
+                                            
+                                            <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                                                <div style={{ flex: 1 }}>
+                                                    <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                    <select className="qr-input shape-select" style={{padding: '8px'}} value={fgGradientType} onChange={(e) => setFgGradientType(e.target.value)}>
+                                                        <option value="linear">Linear</option>
+                                                        <option value="radial">Radial</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                {fgGradientType === 'linear' && (
+                                                    <div style={{ flex: 1 }}>
+                                                        <div className="slider-header" style={{marginBottom: '6px'}}>
+                                                            <label style={{margin: 0}}>Angle</label>
+                                                            <span>{gradientAngle}°</span>
+                                                        </div>
+                                                        <input 
+                                                            type="range" 
+                                                            min="0" max="360" 
+                                                            value={gradientAngle} 
+                                                            onChange={(e) => setGradientAngle(Number(e.target.value))}
+                                                            className="styled-slider"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+
+                                {/* Background Colors */}
                                 <div className="color-picker-group">
-                                    <label>Background</label>
+                                    <label style={{fontWeight: '700', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', marginBottom: '12px'}}>Background</label>
                                     <div className="color-input-wrapper">
                                         <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} />
                                         <span>{bgColor}</span>
                                     </div>
+                                    <label className="checkbox-label" style={{marginTop: '12px'}}>
+                                        <input type="checkbox" checked={useBgGradient} onChange={(e) => setUseBgGradient(e.target.checked)} />
+                                        Use Gradient?
+                                    </label>
+                                    
+                                    {useBgGradient && (
+                                        <div style={{ padding: '15px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '12px' }}>
+                                            <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                            <div className="color-input-wrapper">
+                                                <input type="color" value={bgGradientColor} onChange={(e) => setBgGradientColor(e.target.value)} />
+                                                <span>{bgGradientColor}</span>
+                                            </div>
+                                            
+                                            <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                                                <div style={{ flex: 1 }}>
+                                                    <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                    <select className="qr-input shape-select" style={{padding: '8px'}} value={bgGradientType} onChange={(e) => setBgGradientType(e.target.value)}>
+                                                        <option value="linear">Linear</option>
+                                                        <option value="radial">Radial</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                {bgGradientType === 'linear' && (
+                                                    <div style={{ flex: 1 }}>
+                                                        <div className="slider-header" style={{marginBottom: '6px'}}>
+                                                            <label style={{margin: 0}}>Angle</label>
+                                                            <span>{bgGradientAngle}°</span>
+                                                        </div>
+                                                        <input 
+                                                            type="range" 
+                                                            min="0" max="360" 
+                                                            value={bgGradientAngle} 
+                                                            onChange={(e) => setBgGradientAngle(Number(e.target.value))}
+                                                            className="styled-slider"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -258,30 +488,17 @@ const QRGenerator = () => {
 
                     {/* Right Panel: Preview */}
                     <div className="qr-preview-panel">
-                        <div className="qr-display-area" style={{ backgroundColor: bgColor }} ref={canvasRef}>
-                            {qrValue ? (
-                                <>
-                                    <div className="qr-code-wrapper">
-                                        <QRCodeCanvas
-                                            value={qrValue}
-                                            size={1024} 
-                                            level={"H"}
-                                            includeMargin={false}
-                                            fgColor={fgColor}
-                                            bgColor={bgColor}
-                                            imageSettings={imageSettings}
-                                            className="qr-canvas-element"
-                                            style={{ width: '280px', height: '280px' }} 
-                                        />
-                                    </div>
-                                    {domain && <div className="qr-domain-tag" style={{ color: fgColor }}>{domain}</div>}
-                                </>
-                            ) : (
+                        <div className="qr-display-area" style={{ backgroundColor: bgColor }}>
+                            <div className="qr-code-wrapper" ref={qrRef} style={{ display: qrValue ? 'block' : 'none' }}></div>
+                            
+                            {!qrValue && (
                                 <div className="qr-placeholder">
                                     <QrCode size={48} color="rgba(0,0,0,0.1)" />
                                     <p>Enter data to generate QR</p>
                                 </div>
                             )}
+                            
+                            {qrValue && domain && <div className="qr-domain-tag" style={{ color: fgColor }}>{domain}</div>}
                         </div>
 
                         <button 

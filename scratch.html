@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body>
+    <div id="qr"></div>
+    <script>
+        try {
+            const qrCode = new QRCodeStyling({ width: 300, height: 300 });
+            qrCode.append(document.getElementById("qr"));
+            qrCode.update({
+                data: "test",
+                dotsOptions: { color: "#000", gradient: null }
+            });
+            console.log("SUCCESS");
+        } catch(e) {
+            console.error("ERROR:", e.message);
+        }
+    </script>
+</body>
+</html>
