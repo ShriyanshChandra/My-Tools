@@ -1,8 +1,8 @@
 /* QRGenerator.css */
 .qr-generator-page {
     min-height: 100vh;
-    padding: 2rem;
-    max-width: 1400px;
+    padding: 2rem 4rem;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 10;
@@ -70,7 +70,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    letter-spacing: -1px;
+    letter-spacing: var(--tracking-heading);
 }
 
 /* Type Selector */
@@ -93,6 +93,7 @@
     cursor: pointer;
     font-family: inherit;
     font-weight: 500;
+    letter-spacing: var(--tracking-normal);
     transition: all 0.2s;
 }
 
@@ -124,6 +125,7 @@
     outline: none;
     transition: all 0.3s ease;
     font-family: inherit;
+    letter-spacing: var(--tracking-normal);
 }
 
 .qr-input:focus {
@@ -170,6 +172,8 @@
     gap: 8px;
     font-size: 1.1rem;
     margin-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-heading);
     color: var(--text-primary);
 }
 
@@ -198,6 +202,7 @@
 
 .color-input-wrapper input[type="color"] {
     -webkit-appearance: none;
+    appearance: none;
     border: none;
     width: 30px;
     height: 30px;
@@ -337,6 +342,7 @@
 
 .styled-slider {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 6px;
     background: rgba(255,255,255,0.1);

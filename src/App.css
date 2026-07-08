@@ -1,7 +1,7 @@
 .app-container {
   min-height: 100vh;
-  padding: 2rem;
-  max-width: 1400px;
+  padding: 2rem 4rem; /* Added horizontal padding to prevent edge touching */
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 10;
@@ -22,16 +22,37 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: var(--tracking-heading);
 }
 
 .logo-icon {
   background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 /* Hero Section */
@@ -61,7 +82,7 @@
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  letter-spacing: -2px;
+  letter-spacing: var(--tracking-heading);
 }
 
 .hero p {

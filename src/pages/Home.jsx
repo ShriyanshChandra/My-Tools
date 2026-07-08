@@ -8,21 +8,30 @@ import {
   Lock, 
   QrCode,
   ArrowRight,
-  Code
+  Code,
+  Palette
 } from 'lucide-react';
 import '../App.css'; // Path is now one level up
 
 function Home() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [theme, setTheme] = useState(localStorage.getItem('app-theme') || 'neon');
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'neon' ? 'tlou' : 'neon';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('app-theme', newTheme);
+  };
 
   const toolsPlaceholder = [
     {
       id: 'qr',
       title: 'QR Code Generator',
       desc: 'Instantly generate high-quality QR codes for URLs with custom domain labels.',
-      icon: <QrCode size={28} color="#00FA9A" />,
+      icon: <QrCode size={28} color="var(--tool-accent)" />,
       delay: '0.1s',
-      color: '#00FA9A',
+      color: 'var(--tool-accent)',
       path: '/qr'
     }
   ];
@@ -41,17 +50,15 @@ function Home() {
         <nav className="navbar glass">
           <div className="logo">
             <Terminal className="logo-icon" size={32} />
-            <span>Dev<span className="text-gradient">Tools</span></span>
+            <span>My <span className="text-gradient">Tools</span></span>
           </div>
-          <button className="btn btn-primary">Github</button>
+          <button className="icon-btn" title="Change Theme" onClick={toggleTheme}>
+            <Palette size={20} />
+          </button>
         </nav>
 
         {/* Hero Section */}
         <header className="hero">
-          <div className="hero-tag">
-            <Sparkles size={16} />
-            <span>v1.0 is now live</span>
-          </div>
           <h1>
             Your Personal <br />
             <span className="text-gradient">Superpower Suite</span>

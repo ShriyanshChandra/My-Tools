@@ -1,6 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-:root {
+@font-face {
+  font-family: 'TLOU Rough';
+  src: url('/fonts/TLOU-Rough.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TLOU Normal';
+  src: url('/fonts/TLOU-Normal.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-theme="neon"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: -1px;
   --bg-primary: #030014;
   --bg-secondary: #0a0a20;
   --text-primary: #ffffff;
@@ -8,8 +26,37 @@
   --accent-1: #ff2a85;
   --accent-2: #8a2be2;
   --accent-3: #00d2ff;
+  --tool-accent: #00FA9A;
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
+  --blob-duration: 20s;
+  --blob-opacity: 0.6;
+}
+
+[data-theme="tlou"] {
+  --font-primary: 'TLOU Normal', 'Outfit', sans-serif;
+  --font-heading: 'TLOU Rough', 'Space Grotesk', sans-serif;
+  --tracking-normal: 1px;
+  --tracking-heading: 2px;
+  --bg-primary: #1a1f1b;
+  --bg-image: url('/images/tlou-img-2.png');
+  --bg-secondary: #2b332d;
+  --text-primary: #e6e2d8;
+  --text-secondary: #999386;
+  --accent-1: #584439;
+  /* Blood red */
+  --accent-2: #385233;
+  /* Overgrown moss green */
+  --accent-3: #8a9950;
+  /* Spore yellow/green */
+  --tool-accent: var(--accent-1);
+  --glass-bg: rgba(20, 25, 22, 0.4);
+  --glass-border: rgba(140, 31, 31, 0.15);
+  /* Subtle red border */
+  --blob-duration: 60s;
+  /* Slow moving spores */
+  --blob-opacity: 0.25;
+  --dirt-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
 }
 
 * {
@@ -19,12 +66,18 @@
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
+  letter-spacing: var(--tracking-normal);
   background-color: var(--bg-primary);
+  background-image: var(--bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Background animated gradient blobs */
@@ -37,13 +90,14 @@ body {
   z-index: -1;
   overflow: hidden;
   filter: blur(120px);
-  opacity: 0.6;
+  opacity: var(--blob-opacity);
+  transition: opacity 1s ease;
 }
 
 .blob {
   position: absolute;
   border-radius: 50%;
-  animation: float 20s infinite ease-in-out alternate;
+  animation: float var(--blob-duration) infinite ease-in-out alternate;
 }
 
 .blob-1 {
@@ -75,9 +129,17 @@ body {
 }
 
 @keyframes float {
-  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50% { transform: translate(5%, 10%) rotate(180deg) scale(1.1); }
-  100% { transform: translate(-5%, 5%) rotate(360deg) scale(0.9); }
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translate(5%, 10%) rotate(180deg) scale(1.1);
+  }
+
+  100% {
+    transform: translate(-5%, 5%) rotate(360deg) scale(0.9);
+  }
 }
 
 /* Glassmorphism utilities */
@@ -97,8 +159,11 @@ body {
 }
 
 /* Typography */
-h1, h2, h3 {
-  font-family: 'Space Grotesk', sans-serif;
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  letter-spacing: var(--tracking-heading);
 }
 
 .text-gradient {
@@ -109,9 +174,79 @@ h1, h2, h3 {
   display: inline-block;
 }
 
+[data-theme="tlou"] .text-gradient {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #ffffff;
+}
+
+[data-theme="tlou"] .hero h1,
+[data-theme="tlou"] .qr-header h1 {
+  color: #ffffff;
+}
+
+[data-theme="tlou"] h1,
+[data-theme="tlou"] h2,
+[data-theme="tlou"] h3,
+[data-theme="tlou"] .logo {
+  text-transform: uppercase;
+}
+
+[data-theme="tlou"] .hero {
+  text-align: right;
+}
+
+[data-theme="tlou"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="tlou"] .hero p {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[data-theme="tlou"] .blob-container {
+  display: none;
+}
+
+[data-theme="tlou"] .glass,
+[data-theme="tlou"] .glass-panel,
+[data-theme="tlou"] .tool-card,
+[data-theme="tlou"] .qr-settings-panel {
+  background-image: var(--dirt-texture), linear-gradient(135deg, rgba(20, 25, 22, 0.7) 0%, rgba(15, 18, 16, 0.9) 100%);
+  background-blend-mode: overlay, normal;
+  border-color: rgba(140, 31, 31, 0.3);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="tlou"] .card-content {
+  background: transparent;
+  /* Allow dirt texture to show through */
+}
+
+/* TLOU Theme Specific Overrides for QR Generator */
+[data-theme="tlou"] .type-btn.active {
+  background: var(--accent-1);
+  color: #fff;
+  border-color: var(--accent-1);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 0 5px rgba(140, 31, 31, 0.5);
+}
+
+[data-theme="tlou"] .qr-input {
+  background: rgba(10, 15, 12, 0.8);
+  border: 1px solid rgba(140, 31, 31, 0.2);
+  color: var(--text-primary);
+}
+
+[data-theme="tlou"] .qr-input:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 4px rgba(140, 31, 31, 0.15);
+}
+
 /* Base button */
 .btn {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-heading);
   font-weight: 600;
   padding: 12px 28px;
   border-radius: 12px;
@@ -132,7 +267,10 @@ h1, h2, h3 {
 .btn-primary::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
   z-index: -1;
   transition: opacity 0.3s ease;
