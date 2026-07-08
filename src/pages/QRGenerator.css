@@ -12,6 +12,10 @@
     justify-content: center;
 }
 
+html[data-theme="tlou"] body.qr-page-active {
+    --bg-image: url('/images/TLOU%202%20theme%20img%203.png');
+}
+
 .back-link {
     position: absolute;
     top: 2rem;

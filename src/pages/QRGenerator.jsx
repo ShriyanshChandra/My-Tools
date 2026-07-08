@@ -8,6 +8,14 @@ const QRGenerator = () => {
     // State for QR Types and Data
     const [qrType, setQrType] = useState('url'); // 'url', 'wifi', 'email', 'sms', 'text'
     
+    // Add page-specific body class for backgrounds
+    useEffect(() => {
+        document.body.classList.add('qr-page-active');
+        return () => {
+            document.body.classList.remove('qr-page-active');
+        };
+    }, []);
+    
     // Inputs based on type
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
