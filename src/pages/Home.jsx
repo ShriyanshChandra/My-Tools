@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Sparkles, 
-  Terminal, 
-  Calculator, 
-  FileText, 
-  Lock, 
+// import myLogo from '../assets/My-Tools-logo.png';
+
+import {
+  Sparkles,
+  Terminal,
+  Calculator,
+  FileText,
+  Lock,
   QrCode,
   ArrowRight,
   Code,
@@ -64,7 +66,7 @@ function Home() {
             <span className="text-gradient">Superpower Suite</span>
           </h1>
           <p>
-            A collection of fast, beautiful, and secure utilities crafted 
+            A collection of fast, beautiful, and secure utilities crafted
             to boost your daily productivity. No ads, no tracking.
           </p>
         </header>
@@ -72,18 +74,18 @@ function Home() {
         {/* Tools Grid */}
         <main className="tools-grid">
           {toolsPlaceholder.map((tool, index) => (
-            <Link 
+            <Link
               to={tool.path}
-              key={tool.id} 
+              key={tool.id}
               className="tool-card"
               style={{ animationDelay: tool.delay, textDecoration: 'none' }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <div className="card-content">
-                <div 
+                <div
                   className="card-icon-wrapper"
-                  style={{ 
+                  style={{
                     boxShadow: hoveredIndex === index ? `0 0 20px ${tool.color}40` : 'none',
                     borderColor: hoveredIndex === index ? `${tool.color}50` : 'rgba(255,255,255,0.05)'
                   }}
