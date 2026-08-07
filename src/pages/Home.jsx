@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 // import myLogo from '../assets/My-Tools-logo.png';
 
 import {
-  Sparkles,
   Terminal,
-  Calculator,
-  FileText,
-  Lock,
   QrCode,
   ArrowRight,
-  Code,
-  Palette
+  Palette,
+  Music
 } from 'lucide-react';
 import '../App.css'; // Path is now one level up
 
@@ -35,6 +31,15 @@ function Home() {
       delay: '0.1s',
       color: 'var(--tool-accent)',
       path: '/qr'
+    },
+    {
+      id: 'sound',
+      title: 'Background Sound',
+      desc: 'Mix ambient background sounds (Rain, Ocean, Noise) with custom frequency tones & binaural beats for focus, study & sleep.',
+      icon: <Music size={28} color="#ff2a85" />,
+      delay: '0.2s',
+      color: '#ff2a85',
+      path: '/sound'
     }
   ];
 

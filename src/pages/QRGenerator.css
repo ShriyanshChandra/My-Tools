@@ -16,7 +16,7 @@ html[data-theme="tlou"] body.qr-page-active {
     --bg-image: url('/images/TLOU%202%20theme%20img%203.png');
 }
 
-.back-link {
+.qr-generator-page .back-link {
     position: absolute;
     top: 2rem;
     left: 2rem;
@@ -31,7 +31,7 @@ html[data-theme="tlou"] body.qr-page-active {
     z-index: 20;
 }
 
-.back-link:hover {
+.qr-generator-page .back-link:hover {
     color: var(--accent-3);
 }
 
