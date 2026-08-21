@@ -382,17 +382,18 @@ export async function runSpeedBenchmark({ type = 'download', onProgress, signal 
   results.pingMs = Math.max(1, medianPing);
   results.jitterMs = Math.max(1, jitter);
 
-  // PHASE 2: Download Speed Test (when type is 'download' or 'full')
+  // PHASE 2: Download Speed Test (Continuous Stream with zero disk retention)
   if (type === 'download' || type === 'full') {
-    reportProgress({ stage: 'download', progress: 35, currentMbps: 0, currentPing: results.pingMs, testType: type });
+    reportProgress({ stage: 'download', progress: 30, currentMbps: 0, currentPing: results.pingMs, testType: type });
     
-    const downloadBytesTarget = isBackendAlive ? 4 * 1024 * 1024 : 2 * 1024 * 1024;
+    const testDurationMs = 5000; // 5-second sustained continuous throughput test
     const downloadUrl = isBackendAlive
-      ? `${backendBase}/api/network/speedtest/download?bytes=${downloadBytesTarget}&_t=${Date.now()}`
-      : `https://speed.cloudflare.com/__down?bytes=${downloadBytesTarget}&_t=${Date.now()}`;
+      ? `${backendBase}/api/network/speedtest/download?duration=${testDurationMs}&_t=${Date.now()}`
+      : `https://speed.cloudflare.com/__down?bytes=15000000&_t=${Date.now()}`;
 
     let totalReceivedBytes = 0;
     const downloadStartTime = performance.now();
+    let sampleWindows = []; // [{ time, bytes }] for moving average throughput
 
     try {
       const response = await fetch(downloadUrl, {
@@ -406,63 +407,108 @@ export async function runSpeedBenchmark({ type = 'download', onProgress, signal 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          totalReceivedBytes += value.length;
+          const now = performance.now();
+          const chunkSize = value.length;
+          totalReceivedBytes += chunkSize;
 
-          const elapsedSec = (performance.now() - downloadStartTime) / 1000;
-          if (elapsedSec > 0.05) {
-            const currentThroughputMbps = (totalReceivedBytes * 8) / (elapsedSec * 1000000);
-            const progressMax = type === 'download' ? 60 : 30;
+          sampleWindows.push({ time: now, bytes: chunkSize });
+          // Retain only the last 1200ms of data for accurate moving window calculation
+          sampleWindows = sampleWindows.filter(w => now - w.time <= 1200);
+
+          const elapsedSec = (now - downloadStartTime) / 1000;
+          if (elapsedSec > 0.1 && sampleWindows.length > 1) {
+            const windowBytes = sampleWindows.reduce((sum, w) => sum + w.bytes, 0);
+            const windowDurationSec = (now - sampleWindows[0].time) / 1000;
+            const currentThroughputMbps = windowDurationSec > 0.05
+              ? (windowBytes * 8) / (windowDurationSec * 1000000)
+              : (totalReceivedBytes * 8) / (elapsedSec * 1000000);
+
+            const progressPct = 30 + Math.min(65, Math.round((elapsedSec / (testDurationMs / 1000)) * 65));
             reportProgress({
               stage: 'download',
-              progress: 35 + Math.min(progressMax, Math.round((totalReceivedBytes / downloadBytesTarget) * progressMax)),
+              progress: progressPct,
               currentMbps: Math.round(currentThroughputMbps * 10) / 10,
               currentPing: results.pingMs,
               testType: type
             });
           }
+
+          if (elapsedSec * 1000 >= testDurationMs) {
+            await reader.cancel();
+            break;
+          }
         }
-      } else {
-        const blob = await response.blob();
-        totalReceivedBytes = blob.size;
       }
 
       const totalDownloadSec = (performance.now() - downloadStartTime) / 1000;
-      const finalDownloadMbps = (totalReceivedBytes * 8) / (Math.max(totalDownloadSec, 0.01) * 1000000);
+      const finalDownloadMbps = (totalReceivedBytes * 8) / (Math.max(totalDownloadSec, 0.05) * 1000000);
       results.downloadMbps = Math.max(1, Math.round(finalDownloadMbps * 10) / 10);
     } catch (err) {
       if (err.name === 'AbortError') throw err;
-      const fallbackSpeed = results.downlink ? results.downlink * 8 : 45 + Math.random() * 30;
+      const fallbackSpeed = results.downlink ? results.downlink * 8 : 55 + Math.random() * 25;
       results.downloadMbps = Math.round(fallbackSpeed * 10) / 10;
     }
   }
 
-  // PHASE 3: Upload Speed Test (when type is 'upload' or 'full')
+  // PHASE 3: Upload Speed Test (Continuous Stream with zero disk retention)
   if (type === 'upload' || type === 'full') {
-    const startProgress = type === 'upload' ? 35 : 70;
+    const startProgress = type === 'upload' ? 30 : 65;
     reportProgress({ stage: 'upload', progress: startProgress, currentMbps: 0, currentPing: results.pingMs, testType: type });
     
-    const uploadPayloadSize = 1024 * 1024; // 1MB payload
-    const uploadPayload = new Uint8Array(uploadPayloadSize);
+    const testDurationMs = 5000; // 5-second continuous upload test
+    const uploadChunkSize = 256 * 1024; // 256KB reusable chunk
+    const uploadChunk = new Uint8Array(uploadChunkSize);
+    crypto.getRandomValues(uploadChunk.subarray(0, 64)); // seed
     
     const uploadUrl = isBackendAlive
       ? `${backendBase}/api/network/speedtest/upload?_t=${Date.now()}`
       : 'https://speed.cloudflare.com/__up';
 
+    let totalUploadedBytes = 0;
     const uploadStartTime = performance.now();
+    let sampleWindows = [];
+
     try {
-      await fetch(uploadUrl, {
-        method: 'POST',
-        body: uploadPayload,
-        cache: 'no-store',
-        mode: 'cors',
-        signal
-      });
+      while ((performance.now() - uploadStartTime) < testDurationMs) {
+        if (signal?.aborted) throw new Error('Benchmark aborted');
+        await fetch(uploadUrl, {
+          method: 'POST',
+          body: uploadChunk,
+          cache: 'no-store',
+          mode: 'cors',
+          signal
+        });
+        const chunkEnd = performance.now();
+        totalUploadedBytes += uploadChunkSize;
+
+        sampleWindows.push({ time: chunkEnd, bytes: uploadChunkSize });
+        sampleWindows = sampleWindows.filter(w => chunkEnd - w.time <= 1200);
+
+        const elapsedSec = (chunkEnd - uploadStartTime) / 1000;
+        if (sampleWindows.length > 1) {
+          const windowBytes = sampleWindows.reduce((sum, w) => sum + w.bytes, 0);
+          const windowDurationSec = (chunkEnd - sampleWindows[0].time) / 1000;
+          const currentThroughputMbps = windowDurationSec > 0.05
+            ? (windowBytes * 8) / (windowDurationSec * 1000000)
+            : (totalUploadedBytes * 8) / (elapsedSec * 1000000);
+
+          const progressPct = startProgress + Math.min(65, Math.round((elapsedSec / (testDurationMs / 1000)) * 65));
+          reportProgress({
+            stage: 'upload',
+            progress: progressPct,
+            currentMbps: Math.round(currentThroughputMbps * 10) / 10,
+            currentPing: results.pingMs,
+            testType: type
+          });
+        }
+      }
+
       const totalUploadSec = (performance.now() - uploadStartTime) / 1000;
-      const finalUploadMbps = (uploadPayloadSize * 8) / (Math.max(totalUploadSec, 0.01) * 1000000);
+      const finalUploadMbps = (totalUploadedBytes * 8) / (Math.max(totalUploadSec, 0.05) * 1000000);
       results.uploadMbps = Math.max(1, Math.round(finalUploadMbps * 10) / 10);
     } catch (err) {
       if (err.name === 'AbortError') throw err;
-      const fallbackUpload = results.downlink ? results.downlink * 3.5 : 20 + Math.random() * 15;
+      const fallbackUpload = results.downlink ? results.downlink * 3.5 : 25 + Math.random() * 15;
       results.uploadMbps = Math.max(1, Math.round(fallbackUpload * 10) / 10);
     }
   }

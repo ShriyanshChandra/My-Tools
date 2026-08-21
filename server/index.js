@@ -41,41 +41,79 @@ app.get('/api/network/ping', (req, res) => {
   });
 });
 
+// Continuous In-Memory Download Stream (Zero Disk Storage, Zero File Saving)
 app.get('/api/network/speedtest/download', (req, res) => {
-  const requestedBytes = Math.min(
-    Math.max(parseInt(req.query.bytes) || 2 * 1024 * 1024, 64 * 1024), // min 64KB, default 2MB
-    25 * 1024 * 1024 // max 25MB
-  );
+  const durationMs = Math.min(Math.max(parseInt(req.query.duration) || 6000, 1000), 15000); // 1s to 15s max
+  const requestedBytes = parseInt(req.query.bytes) || 0;
 
   res.set({
     'Content-Type': 'application/octet-stream',
-    'Content-Length': requestedBytes,
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
     'Pragma': 'no-cache',
-    'Expires': '0',
-    'Content-Disposition': 'attachment; filename="speedtest.bin"'
+    'Expires': '0'
   });
 
-  // Stream slices of the pre-generated buffer
-  let bytesRemaining = requestedBytes;
-  while (bytesRemaining > 0) {
-    const chunkToSend = Math.min(bytesRemaining, CHUNK_SIZE);
-    res.write(speedBuffer.subarray(0, chunkToSend));
-    bytesRemaining -= chunkToSend;
+  if (requestedBytes > 0) {
+    // Fixed-length byte mode
+    res.set('Content-Length', requestedBytes);
+    let bytesRemaining = requestedBytes;
+    while (bytesRemaining > 0) {
+      const chunk = Math.min(bytesRemaining, CHUNK_SIZE);
+      res.write(speedBuffer.subarray(0, chunk));
+      bytesRemaining -= chunk;
+    }
+    return res.end();
   }
-  res.end();
+
+  // Continuous real-time streaming mode over duration
+  const startTime = Date.now();
+  let isClosed = false;
+
+  req.on('close', () => {
+    isClosed = true;
+  });
+
+  const sendNextChunk = () => {
+    if (isClosed || Date.now() - startTime >= durationMs) {
+      return res.end();
+    }
+
+    const canContinue = res.write(speedBuffer);
+    if (canContinue) {
+      setImmediate(sendNextChunk);
+    } else {
+      res.once('drain', sendNextChunk);
+    }
+  };
+
+  sendNextChunk();
 });
 
-// Upload speed test endpoint: accepts raw binary data streams up to 25MB
-app.post('/api/network/speedtest/upload', express.raw({ type: '*/*', limit: '25mb' }), (req, res) => {
-  const bytesReceived = req.body ? req.body.length : 0;
-  res.set({
-    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+// Ephemeral Upload Receiver (Discards all data immediately, zero disk storage, zero memory retention)
+app.post('/api/network/speedtest/upload', (req, res) => {
+  let bytesReceived = 0;
+  const startTime = Date.now();
+
+  req.on('data', (chunk) => {
+    bytesReceived += chunk.length;
+    // Chunk is immediately freed from memory
   });
-  res.json({
-    success: true,
-    bytesReceived,
-    serverTime: Date.now()
+
+  req.on('end', () => {
+    const durationMs = Date.now() - startTime;
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    });
+    res.json({
+      success: true,
+      bytesReceived,
+      durationMs,
+      serverTime: Date.now()
+    });
+  });
+
+  req.on('error', () => {
+    res.status(500).json({ success: false });
   });
 });
 

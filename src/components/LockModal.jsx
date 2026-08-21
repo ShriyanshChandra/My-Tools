@@ -48,12 +48,31 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
     setError('');
 
     try {
-      const backendBase = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
-      const response = await fetch(`${backendBase}/api/verify-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      });
+      const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+      let response = null;
+
+      // 1. Attempt primary backend URL
+      if (remoteBackend) {
+        try {
+          response = await fetch(`${remoteBackend}/api/verify-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+          });
+        } catch {
+          // If remote backend failed or is asleep, attempt local proxy
+          response = null;
+        }
+      }
+
+      // 2. Fallback to local endpoint if remote was not set or failed
+      if (!response) {
+        response = await fetch('/api/verify-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+      }
 
       const data = await response.json().catch(() => ({}));
 
@@ -68,7 +87,7 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
         triggerShake();
       }
     } catch {
-      setError('Cannot reach authentication server. Please ensure server is running.');
+      setError('Cannot reach authentication server. If Render backend is sleeping, it may take ~30s to wake up.');
       triggerShake();
     } finally {
       setIsLoading(false);
