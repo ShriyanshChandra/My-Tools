@@ -48,8 +48,8 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
     setError('');
 
     try {
-      // 1. Attempt verification via backend Express server endpoint
-      const response = await fetch('/api/verify-password', {
+      const backendBase = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+      const response = await fetch(`${backendBase}/api/verify-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })

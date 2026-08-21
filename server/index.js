@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { db } from './firebase.js';
@@ -16,8 +17,67 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(s => s.trim()) : true,
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
+
+// Pre-generate a 5MB random chunk for fast throughput streaming
+const CHUNK_SIZE = 1024 * 1024 * 5; // 5MB
+const speedBuffer = crypto.randomBytes(CHUNK_SIZE);
+
+// Network Speed Test / Ping Endpoints
+app.get('/api/network/ping', (req, res) => {
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  res.json({
+    status: 'ok',
+    serverTime: Date.now(),
+    clientTimestamp: req.query.t || null
+  });
+});
+
+app.get('/api/network/speedtest/download', (req, res) => {
+  const requestedBytes = Math.min(
+    Math.max(parseInt(req.query.bytes) || 2 * 1024 * 1024, 64 * 1024), // min 64KB, default 2MB
+    25 * 1024 * 1024 // max 25MB
+  );
+
+  res.set({
+    'Content-Type': 'application/octet-stream',
+    'Content-Length': requestedBytes,
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+    'Content-Disposition': 'attachment; filename="speedtest.bin"'
+  });
+
+  // Stream slices of the pre-generated buffer
+  let bytesRemaining = requestedBytes;
+  while (bytesRemaining > 0) {
+    const chunkToSend = Math.min(bytesRemaining, CHUNK_SIZE);
+    res.write(speedBuffer.subarray(0, chunkToSend));
+    bytesRemaining -= chunkToSend;
+  }
+  res.end();
+});
+
+// Upload speed test endpoint: accepts raw binary data streams up to 25MB
+app.post('/api/network/speedtest/upload', express.raw({ type: '*/*', limit: '25mb' }), (req, res) => {
+  const bytesReceived = req.body ? req.body.length : 0;
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+  });
+  res.json({
+    success: true,
+    bytesReceived,
+    serverTime: Date.now()
+  });
+});
 
 // In-memory rate limiter for brute-force protection
 const loginAttempts = new Map(); // ip -> { count, resetTime }
@@ -94,7 +154,7 @@ app.post('/api/verify-password', async (req, res) => {
           correctPassword = configDoc.data().password;
         }
       } catch (dbErr) {
-        console.warn('⚠️ [Firestore] Failed to read settings/auth doc, using env fallback:', dbErr.message);
+        console.warn('[Firestore] Failed to read settings/auth doc, using env fallback:', dbErr.message);
       }
     }
 
@@ -116,7 +176,7 @@ app.post('/api/verify-password', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error in /api/verify-password:', error.message);
+    console.error('[Auth] Error in /api/verify-password:', error.message);
     return res.status(500).json({
       success: false,
       message: 'Internal server error while verifying password'
@@ -145,12 +205,12 @@ async function syncPasswordToFirestore() {
         updatedAt: new Date().toISOString(),
         syncedFromEnv: true
       }, { merge: true });
-      console.log(`🔄 [Firestore] Synchronized master password from .env to Firestore settings/auth.`);
+      console.log('[Firestore] Synchronized master password from .env to Firestore settings/auth.');
     } else {
-      console.log(`✅ [Firestore] Master password in Firestore is up to date with .env.`);
+      console.log('[Firestore] Master password in Firestore is up to date with .env.');
     }
   } catch (err) {
-    console.warn(`⚠️ [Firestore] Auto-sync warning:`, err.message);
+    console.warn('[Firestore] Auto-sync warning:', err.message);
   }
 }
 
@@ -168,13 +228,13 @@ try {
       }
     });
   }
-} catch (e) {
+} catch {
   // File watch fallback
 }
 
 app.listen(PORT, async () => {
-  console.log(`🚀 Express server running at http://localhost:${PORT}`);
-  console.log(`🔒 Secret tools password protection active (Port: ${PORT})`);
+  console.log(`[Server] Express server running on port ${PORT}`);
+  console.log(`[Server] Password protection and network speedtest active`);
   await syncPasswordToFirestore();
 });
 

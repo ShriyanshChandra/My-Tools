@@ -10,7 +10,8 @@ import {
   Lock,
   Unlock,
   Shield,
-  Sparkles
+  Sparkles,
+  Radio
 } from 'lucide-react';
 import LockModal from '../components/LockModal';
 import '../App.css';
@@ -69,6 +70,16 @@ function Home() {
       delay: '0.2s',
       color: '#ff2a85',
       path: '/sound',
+      hidden: false
+    },
+    {
+      id: 'network-map',
+      title: 'Network Map',
+      desc: 'Interactive 2D room WiFi & bandwidth heatmap. Map coverage, measure live Mbps/ping, spot dead zones, and optimize router placement.',
+      icon: <Radio size={28} color="#00fa9a" />,
+      delay: '0.25s',
+      color: '#00fa9a',
+      path: '/network-map',
       hidden: false
     },
     {
