@@ -76,9 +76,9 @@ const QRGenerator = () => {
             // Apply initial CSS to the injected canvas
             const canvas = qrRef.current.querySelector('canvas');
             if(canvas) {
-                canvas.style.width = '280px';
-                canvas.style.height = '280px';
-                canvas.style.borderRadius = '12px';
+                canvas.style.width = '17.5rem';
+                canvas.style.height = '17.5rem';
+                canvas.style.borderRadius = '0.75rem';
                 canvas.classList.add('qr-canvas-element');
             }
         }
@@ -171,8 +171,8 @@ const QRGenerator = () => {
         if (qrRef.current) {
             const canvas = qrRef.current.querySelector('canvas');
             if(canvas) {
-                canvas.style.width = '280px';
-                canvas.style.height = '280px';
+                canvas.style.width = '17.5rem';
+                canvas.style.height = '17.5rem';
                 canvas.classList.add('qr-canvas-element');
             }
         }
@@ -364,31 +364,31 @@ const QRGenerator = () => {
                         <div className="design-section">
                             <h3 className="section-title"><Palette size={18}/> Design & Colors</h3>
                             
-                            <div className="color-pickers" style={{ gridTemplateColumns: '1fr', gap: '30px' }}>
+                            <div className="color-pickers" style={{ gridTemplateColumns: '1fr', gap: '1.875rem' }}>
                                 {/* Foreground Colors */}
                                 <div className="color-picker-group">
-                                    <label style={{fontWeight: '700', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', marginBottom: '12px'}}>Foreground</label>
+                                    <label style={{fontWeight: '700', borderBottom: '0.0625rem solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem'}}>Foreground</label>
                                     <div className="color-input-wrapper">
                                         <input type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} />
                                         <span>{fgColor}</span>
                                     </div>
-                                    <label className="checkbox-label" style={{marginTop: '12px'}}>
+                                    <label className="checkbox-label" style={{marginTop: '0.75rem'}}>
                                         <input type="checkbox" checked={useGradient} onChange={(e) => setUseGradient(e.target.checked)} />
                                         Use Gradient?
                                     </label>
                                     
                                     {useGradient && (
-                                        <div style={{ padding: '15px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '12px' }}>
-                                            <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                        <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
+                                            <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
                                             <div className="color-input-wrapper">
                                                 <input type="color" value={gradientColor} onChange={(e) => setGradientColor(e.target.value)} />
                                                 <span>{gradientColor}</span>
                                             </div>
                                             
-                                            <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                                            <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
                                                 <div style={{ flex: 1 }}>
-                                                    <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Type</label>
-                                                    <select className="qr-input shape-select" style={{padding: '8px'}} value={fgGradientType} onChange={(e) => setFgGradientType(e.target.value)}>
+                                                    <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                    <select className="qr-input shape-select" style={{padding: '0.5rem'}} value={fgGradientType} onChange={(e) => setFgGradientType(e.target.value)}>
                                                         <option value="linear">Linear</option>
                                                         <option value="radial">Radial</option>
                                                     </select>
@@ -396,7 +396,7 @@ const QRGenerator = () => {
                                                 
                                                 {fgGradientType === 'linear' && (
                                                     <div style={{ flex: 1 }}>
-                                                        <div className="slider-header" style={{marginBottom: '6px'}}>
+                                                        <div className="slider-header" style={{marginBottom: '0.375rem'}}>
                                                             <label style={{margin: 0}}>Angle</label>
                                                             <span>{gradientAngle}°</span>
                                                         </div>
@@ -416,28 +416,28 @@ const QRGenerator = () => {
 
                                 {/* Background Colors */}
                                 <div className="color-picker-group">
-                                    <label style={{fontWeight: '700', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', marginBottom: '12px'}}>Background</label>
+                                    <label style={{fontWeight: '700', borderBottom: '0.0625rem solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem'}}>Background</label>
                                     <div className="color-input-wrapper">
                                         <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} />
                                         <span>{bgColor}</span>
                                     </div>
-                                    <label className="checkbox-label" style={{marginTop: '12px'}}>
+                                    <label className="checkbox-label" style={{marginTop: '0.75rem'}}>
                                         <input type="checkbox" checked={useBgGradient} onChange={(e) => setUseBgGradient(e.target.checked)} />
                                         Use Gradient?
                                     </label>
                                     
                                     {useBgGradient && (
-                                        <div style={{ padding: '15px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', marginTop: '12px' }}>
-                                            <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                        <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
+                                            <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
                                             <div className="color-input-wrapper">
                                                 <input type="color" value={bgGradientColor} onChange={(e) => setBgGradientColor(e.target.value)} />
                                                 <span>{bgGradientColor}</span>
                                             </div>
                                             
-                                            <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                                            <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
                                                 <div style={{ flex: 1 }}>
-                                                    <label style={{marginBottom: '6px', display: 'block', fontSize: '0.85rem'}}>Type</label>
-                                                    <select className="qr-input shape-select" style={{padding: '8px'}} value={bgGradientType} onChange={(e) => setBgGradientType(e.target.value)}>
+                                                    <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                    <select className="qr-input shape-select" style={{padding: '0.5rem'}} value={bgGradientType} onChange={(e) => setBgGradientType(e.target.value)}>
                                                         <option value="linear">Linear</option>
                                                         <option value="radial">Radial</option>
                                                     </select>
@@ -445,7 +445,7 @@ const QRGenerator = () => {
                                                 
                                                 {bgGradientType === 'linear' && (
                                                     <div style={{ flex: 1 }}>
-                                                        <div className="slider-header" style={{marginBottom: '6px'}}>
+                                                        <div className="slider-header" style={{marginBottom: '0.375rem'}}>
                                                             <label style={{margin: 0}}>Angle</label>
                                                             <span>{bgGradientAngle}°</span>
                                                         </div>
