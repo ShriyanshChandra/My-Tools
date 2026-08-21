@@ -124,9 +124,14 @@ app.post('/api/verify-password', async (req, res) => {
   }
 });
 
-// Auto-sync password from .env to Firestore on startup
+// Auto-sync password from .env to Firestore
 async function syncPasswordToFirestore() {
   if (!db) return;
+
+  // Re-read .env files dynamically with override: true
+  dotenv.config({ path: path.resolve(__dirname, '../.env.local'), override: true });
+  dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true });
+
   const envPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD;
   if (!envPassword) return;
 
@@ -149,10 +154,29 @@ async function syncPasswordToFirestore() {
   }
 }
 
+// Watch .env.local for changes and auto-sync live
+try {
+  const envLocalPath = path.resolve(__dirname, '../.env.local');
+  if (fs.existsSync(envLocalPath)) {
+    let debounceTimer = null;
+    fs.watch(envLocalPath, (eventType) => {
+      if (eventType === 'change') {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          syncPasswordToFirestore();
+        }, 300);
+      }
+    });
+  }
+} catch (e) {
+  // File watch fallback
+}
+
 app.listen(PORT, async () => {
   console.log(`🚀 Express server running at http://localhost:${PORT}`);
   console.log(`🔒 Secret tools password protection active (Port: ${PORT})`);
   await syncPasswordToFirestore();
 });
+
 
 
