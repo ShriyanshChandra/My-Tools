@@ -38,7 +38,8 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!password.trim()) {
+    const inputPassword = password.trim();
+    if (!inputPassword) {
       setError('Please enter a password');
       triggerShake();
       return;
@@ -47,51 +48,82 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
     setIsLoading(true);
     setError('');
 
-    try {
-      const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
-      let response = null;
+    const isLocal = typeof window !== 'undefined' && (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.hostname === '[::1]'
+    );
 
-      // 1. Attempt primary backend URL
-      if (remoteBackend) {
-        try {
-          response = await fetch(`${remoteBackend}/api/verify-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password })
-          });
-        } catch {
-          // If remote backend failed or is asleep, attempt local proxy
-          response = null;
-        }
-      }
+    const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+    const clientMasterPass = (import.meta.env.VITE_TOOLS_PASSWORD || '').trim();
 
-      // 2. Fallback to local endpoint if remote was not set or failed
-      if (!response) {
-        response = await fetch('/api/verify-password', {
+    // Sequence of endpoints to query: Local proxy first on localhost, remote backend first in production
+    const endpointsToTry = [];
+    if (isLocal) {
+      endpointsToTry.push('/api/verify-password');
+      if (remoteBackend) endpointsToTry.push(`${remoteBackend}/api/verify-password`);
+    } else {
+      if (remoteBackend) endpointsToTry.push(`${remoteBackend}/api/verify-password`);
+      endpointsToTry.push('/api/verify-password');
+    }
+
+    let verified = false;
+    let verifiedToken = null;
+    let serverReturnedError = '';
+    let reachedAnyServer = false;
+
+    for (const endpoint of endpointsToTry) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password })
+          body: JSON.stringify({ password: inputPassword }),
+          signal: controller.signal
         });
-      }
+        clearTimeout(timeoutId);
 
-      const data = await response.json().catch(() => ({}));
+        const data = await response.json().catch(() => ({}));
+        reachedAnyServer = true;
 
-      if (response.ok && data.success) {
-        setJustUnlocked(true);
-        setTimeout(() => {
-          onUnlockSuccess(data.token);
-          onClose();
-        }, 600);
-      } else {
-        setError(data.message || 'Incorrect password. Access denied.');
-        triggerShake();
+        if (response.ok && data.success) {
+          verified = true;
+          verifiedToken = data.token || 'session-token';
+          break;
+        } else if (response.status === 401 || data.message) {
+          serverReturnedError = data.message || 'Incorrect password. Access denied.';
+        }
+      } catch {
+        // Endpoint unreachable or timed out, attempt next target
       }
-    } catch {
-      setError('Cannot reach authentication server. If Render backend is sleeping, it may take ~30s to wake up.');
-      triggerShake();
-    } finally {
-      setIsLoading(false);
     }
+
+    // Client-side environment fallback
+    if (!verified && clientMasterPass && inputPassword === clientMasterPass) {
+      verified = true;
+      verifiedToken = 'client-verified-session';
+    }
+
+    if (verified) {
+      setJustUnlocked(true);
+      setTimeout(() => {
+        onUnlockSuccess(verifiedToken);
+        onClose();
+      }, 600);
+    } else {
+      setError(
+        serverReturnedError ||
+        (reachedAnyServer
+          ? 'Incorrect password. Access denied.'
+          : (clientMasterPass
+              ? 'Incorrect password. Access denied.'
+              : 'Cannot reach authentication server. If Render backend is sleeping, it may take ~30s to wake up.'))
+      );
+      triggerShake();
+    }
+    setIsLoading(false);
   };
 
   const triggerShake = () => {

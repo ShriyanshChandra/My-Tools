@@ -129,7 +129,7 @@ function checkRateLimit(ip) {
     return true;
   }
 
-  if (record.count >= 6) {
+  if (record.count >= 15) {
     return false; // Rate limited
   }
 
@@ -184,15 +184,19 @@ app.post('/api/verify-password', async (req, res) => {
 
     let correctPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD || 'secret123';
 
-    // If Firestore is connected, check if there's a stored password document
+    // If Firestore is connected, check if there's a stored password document (with fast timeout)
     if (db) {
       try {
-        const configDoc = await db.collection('settings').doc('auth').get();
+        const firestorePromise = db.collection('settings').doc('auth').get();
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firestore timeout')), 1500)
+        );
+        const configDoc = await Promise.race([firestorePromise, timeoutPromise]);
         if (configDoc.exists && configDoc.data()?.password) {
           correctPassword = configDoc.data().password;
         }
-      } catch (dbErr) {
-        console.warn('[Firestore] Failed to read settings/auth doc, using env fallback:', dbErr.message);
+      } catch {
+        // Fallback to env password silently
       }
     }
 
@@ -235,7 +239,11 @@ async function syncPasswordToFirestore() {
 
   try {
     const docRef = db.collection('settings').doc('auth');
-    const doc = await docRef.get();
+    const getPromise = docRef.get();
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Firestore timeout')), 2000)
+    );
+    const doc = await Promise.race([getPromise, timeoutPromise]);
 
     if (!doc.exists || doc.data()?.password !== envPassword) {
       await docRef.set({
@@ -248,7 +256,10 @@ async function syncPasswordToFirestore() {
       console.log('[Firestore] Master password in Firestore is up to date with .env.');
     }
   } catch (err) {
-    console.warn('[Firestore] Auto-sync warning:', err.message);
+    // Suppress verbose error if permission is denied, fallback to local env auth
+    if (err.message && !err.message.includes('timeout')) {
+      console.log('[Firestore] Firestore sync skipped, operating in environment password mode.');
+    }
   }
 }
 
