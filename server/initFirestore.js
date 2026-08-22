@@ -9,7 +9,11 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const newPassword = process.argv[2] || process.env.TOOLS_PASSWORD || 'secret123';
+const newPassword = process.argv[2] || process.env.TOOLS_PASSWORD;
+if (!newPassword) {
+  console.error('❌ Please provide a password argument (node initFirestore.js <pass>) or set TOOLS_PASSWORD in .env');
+  process.exit(1);
+}
 
 async function initFirestorePassword() {
   if (!db) {

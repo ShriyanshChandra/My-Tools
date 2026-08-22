@@ -182,7 +182,7 @@ app.post('/api/verify-password', async (req, res) => {
       });
     }
 
-    let correctPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD || 'secret123';
+    let correctPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD;
 
     // If Firestore is connected, check if there's a stored password document (with fast timeout)
     if (db) {
@@ -198,6 +198,14 @@ app.post('/api/verify-password', async (req, res) => {
       } catch {
         // Fallback to env password silently
       }
+    }
+
+    if (!correctPassword) {
+      console.warn('[Auth] TOOLS_PASSWORD is not set in server environment variables.');
+      return res.status(500).json({
+        success: false,
+        message: 'Authentication not configured on server. Please set TOOLS_PASSWORD in environment.'
+      });
     }
 
     if (safeCompare(password, correctPassword)) {
