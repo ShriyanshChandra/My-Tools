@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Unlock, Eye, EyeOff, X, ShieldAlert, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
 
-const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => {
+const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onResetVisibility }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isShaking, setIsShaking] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -174,6 +175,21 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock }) => 
             </div>
 
             <div className="lock-modal-actions">
+              {onResetVisibility && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    onResetVisibility();
+                    setResetSuccess(true);
+                    setTimeout(() => setResetSuccess(false), 2000);
+                  }}
+                  title="Reset custom card visibility back to defaults"
+                >
+                  <Sparkles size={16} />
+                  <span>{resetSuccess ? 'Reset Done!' : 'Reset Visibility Defaults'}</span>
+                </button>
+              )}
               <button
                 type="button"
                 className="btn btn-lock-again"

@@ -234,6 +234,73 @@ app.post('/api/verify-password', async (req, res) => {
   }
 });
 
+// In-memory cache for tool visibility overrides (persisted to Firestore if connected)
+let cachedVisibilityOverrides = {};
+
+// Retrieve global tool visibility settings
+app.get('/api/settings/visibility', async (req, res) => {
+  if (db) {
+    try {
+      const docPromise = db.collection('settings').doc('visibility').get();
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Firestore timeout')), 1500)
+      );
+      const doc = await Promise.race([docPromise, timeoutPromise]);
+      if (doc.exists && doc.data()?.overrides) {
+        cachedVisibilityOverrides = doc.data().overrides;
+      }
+    } catch {
+      // Fall back to in-memory state
+    }
+  }
+
+  res.json({
+    success: true,
+    overrides: cachedVisibilityOverrides
+  });
+});
+
+// Update global tool visibility settings
+app.post('/api/settings/visibility', async (req, res) => {
+  try {
+    const { overrides } = req.body;
+    if (!overrides || typeof overrides !== 'object') {
+      return res.status(400).json({
+        success: false,
+        message: 'Overrides map is required'
+      });
+    }
+
+    cachedVisibilityOverrides = { ...cachedVisibilityOverrides, ...overrides };
+
+    if (db) {
+      try {
+        const setPromise = db.collection('settings').doc('visibility').set({
+          overrides: cachedVisibilityOverrides,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firestore timeout')), 2000)
+        );
+        await Promise.race([setPromise, timeoutPromise]);
+      } catch {
+        // Cached in memory
+      }
+    }
+
+    res.json({
+      success: true,
+      overrides: cachedVisibilityOverrides,
+      message: 'Visibility updated'
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
 // Auto-sync password from .env to Firestore
 async function syncPasswordToFirestore() {
   if (!db) return;

@@ -51,6 +51,85 @@ function Home() {
     sessionStorage.removeItem('tools-token');
   };
 
+  // Fetch remote visibility overrides on load
+  React.useEffect(() => {
+    const fetchRemoteVisibility = async () => {
+      try {
+        const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+        const endpoints = [];
+        if (remoteBackend) endpoints.push(`${remoteBackend}/api/settings/visibility`);
+        endpoints.push('/api/settings/visibility');
+
+        for (const ep of endpoints) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
+            const res = await fetch(ep, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && data.overrides) {
+                setHiddenOverrides(prev => {
+                  const merged = { ...prev, ...data.overrides };
+                  try {
+                    localStorage.setItem('tools-hidden-overrides', JSON.stringify(merged));
+                  } catch {
+                    // Local storage fallback
+                  }
+                  return merged;
+                });
+                break;
+              }
+            }
+          } catch {
+            // Try next endpoint
+          }
+        }
+      } catch {
+        // Use local fallback
+      }
+    };
+
+    fetchRemoteVisibility();
+  }, []);
+
+  // Helper to sync visibility updates to the cloud backend
+  const syncVisibilityToCloud = async (updatedOverrides) => {
+    try {
+      const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+      const endpoints = [];
+      if (remoteBackend) endpoints.push(`${remoteBackend}/api/settings/visibility`);
+      endpoints.push('/api/settings/visibility');
+
+      for (const ep of endpoints) {
+        try {
+          fetch(ep, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ overrides: updatedOverrides })
+          }).catch(() => {});
+        } catch {
+          // Ignore
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handleResetVisibility = () => {
+    localStorage.removeItem('tools-hidden-overrides');
+    const resetMap = {
+      qr: false,
+      sound: true,
+      'network-map': true,
+      encrypt: false
+    };
+    setHiddenOverrides(resetMap);
+    syncVisibilityToCloud(resetMap);
+  };
+
   const toolsPlaceholder = [
     {
       id: 'qr',
@@ -70,7 +149,7 @@ function Home() {
       delay: '0.2s',
       color: '#ff2a85',
       path: '/sound',
-      hidden: false
+      hidden: true
     },
     {
       id: 'network-map',
@@ -90,7 +169,7 @@ function Home() {
       delay: '0.3s',
       color: '#00d2ff',
       path: '/encrypt',
-      hidden: true
+      hidden: false
     }
   ];
 
@@ -112,6 +191,7 @@ function Home() {
       } catch (err) {
         console.error('Failed to save visibility preference:', err);
       }
+      syncVisibilityToCloud(updated);
       return updated;
     });
   };
@@ -240,6 +320,7 @@ function Home() {
         isUnlocked={isUnlocked}
         onUnlockSuccess={handleUnlockSuccess}
         onLock={handleLock}
+        onResetVisibility={handleResetVisibility}
       />
     </>
   );
