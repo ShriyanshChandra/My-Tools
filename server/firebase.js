@@ -38,6 +38,16 @@ try {
       credential: cert(serviceAccount)
     });
     console.log('✅ [Firestore] Firebase Admin initialized via service account JSON.');
+  } else if (process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY && (process.env.FIREBASE_PROJECT_ID || projectId)) {
+    const formattedPrivateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+    app = initializeApp({
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID || projectId,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: formattedPrivateKey
+      })
+    });
+    console.log('✅ [Firestore] Firebase Admin initialized via environment credentials.');
   } else if (foundKeyPath) {
     const serviceAccount = JSON.parse(fs.readFileSync(foundKeyPath, 'utf8'));
     app = initializeApp({

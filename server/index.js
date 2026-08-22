@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-import fs from 'fs';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { db } from './firebase.js';
@@ -182,29 +181,33 @@ app.post('/api/verify-password', async (req, res) => {
       });
     }
 
-    let correctPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD;
+    let correctPassword = null;
 
-    // If Firestore is connected, check if there's a stored password document (with fast timeout)
+    // 1. Primary: Fetch password from Firestore collection('settings').doc('auth')
     if (db) {
       try {
         const firestorePromise = db.collection('settings').doc('auth').get();
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Firestore timeout')), 1500)
+          setTimeout(() => reject(new Error('Firestore timeout')), 3000)
         );
         const configDoc = await Promise.race([firestorePromise, timeoutPromise]);
         if (configDoc.exists && configDoc.data()?.password) {
           correctPassword = configDoc.data().password;
         }
-      } catch {
-        // Fallback to env password silently
+      } catch (err) {
+        console.warn('[Firestore] Notice while reading settings/auth:', err.message);
       }
     }
 
+    // 2. Fallback: Use server environment variable if Firestore document is not present
     if (!correctPassword) {
-      console.warn('[Auth] TOOLS_PASSWORD is not set in server environment variables.');
+      correctPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD;
+    }
+
+    if (!correctPassword) {
       return res.status(500).json({
         success: false,
-        message: 'Authentication not configured on server. Please set TOOLS_PASSWORD in environment.'
+        message: 'Master password is not configured in Firestore (collection: settings, document: auth, field: password) or environment variables.'
       });
     }
 
@@ -301,65 +304,30 @@ app.post('/api/settings/visibility', async (req, res) => {
   }
 });
 
-// Auto-sync password from .env to Firestore
-async function syncPasswordToFirestore() {
-  if (!db) return;
-
-  // Re-read .env files dynamically with override: true
-  dotenv.config({ path: path.resolve(__dirname, '../.env.local'), override: true });
-  dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true });
-
-  const envPassword = process.env.TOOLS_PASSWORD || process.env.PASSWORD;
-  if (!envPassword) return;
+// Verify Firestore authentication document status on startup
+async function verifyFirestoreConnection() {
+  if (!db) {
+    console.log('[Auth] Running in standalone mode. To enable Firestore password management, configure Firebase credentials.');
+    return;
+  }
 
   try {
     const docRef = db.collection('settings').doc('auth');
-    const getPromise = docRef.get();
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Firestore timeout')), 2000)
-    );
-    const doc = await Promise.race([getPromise, timeoutPromise]);
-
-    if (!doc.exists || doc.data()?.password !== envPassword) {
-      await docRef.set({
-        password: envPassword,
-        updatedAt: new Date().toISOString(),
-        syncedFromEnv: true
-      }, { merge: true });
-      console.log('[Firestore] Synchronized master password from .env to Firestore settings/auth.');
+    const doc = await docRef.get();
+    if (doc.exists && doc.data()?.password) {
+      console.log('[Firestore] Successfully connected. Master password loaded from Firestore settings/auth.');
     } else {
-      console.log('[Firestore] Master password in Firestore is up to date with .env.');
+      console.log('[Firestore] Document settings/auth does not have a password field yet. Create document settings/auth with field password in Firestore Console.');
     }
   } catch (err) {
-    // Suppress verbose error if permission is denied, fallback to local env auth
-    if (err.message && !err.message.includes('timeout')) {
-      console.log('[Firestore] Firestore sync skipped, operating in environment password mode.');
-    }
+    console.warn('[Firestore] Startup connection notice:', err.message);
   }
-}
-
-// Watch .env.local for changes and auto-sync live
-try {
-  const envLocalPath = path.resolve(__dirname, '../.env.local');
-  if (fs.existsSync(envLocalPath)) {
-    let debounceTimer = null;
-    fs.watch(envLocalPath, (eventType) => {
-      if (eventType === 'change') {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          syncPasswordToFirestore();
-        }, 300);
-      }
-    });
-  }
-} catch {
-  // File watch fallback
 }
 
 app.listen(PORT, async () => {
   console.log(`[Server] Express server running on port ${PORT}`);
   console.log(`[Server] Password protection and network speedtest active`);
-  await syncPasswordToFirestore();
+  await verifyFirestoreConnection();
 });
 
 
