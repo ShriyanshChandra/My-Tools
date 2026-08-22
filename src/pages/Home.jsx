@@ -80,7 +80,7 @@ function Home() {
       delay: '0.25s',
       color: '#00fa9a',
       path: '/network-map',
-      hidden: false
+      hidden: true
     },
     {
       id: 'encrypt',
