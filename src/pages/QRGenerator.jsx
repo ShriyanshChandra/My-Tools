@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, Wifi, Link2, Mail, MessageSquare, Type, Image as ImageIcon, Palette, QrCode, LayoutGrid } from 'lucide-react';
+import CustomSelect from '../components/CustomSelect';
 import './QRGenerator.css';
 
 const QRGenerator = () => {
@@ -199,7 +200,7 @@ const QRGenerator = () => {
             const safeLink = link.startsWith('http') ? link : `https://${link}`;
             const hostname = new URL(safeLink).hostname;
             return hostname.replace(/^www\./, '');
-        } catch (e) {
+        } catch {
             return '';
         }
     };
@@ -299,11 +300,15 @@ const QRGenerator = () => {
                                 <div className="grid-inputs">
                                     <input type="text" placeholder="Network Name (SSID)" className="qr-input" value={wifiSSID} onChange={(e) => setWifiSSID(e.target.value)} />
                                     <input type="password" placeholder="Password" className="qr-input" value={wifiPass} onChange={(e) => setWifiPass(e.target.value)} />
-                                    <select className="qr-input" value={wifiType} onChange={(e) => setWifiType(e.target.value)}>
-                                        <option value="WPA">WPA/WPA2/WPA3</option>
-                                        <option value="WEP">WEP</option>
-                                        <option value="nopass">None</option>
-                                    </select>
+                                    <CustomSelect 
+                                        value={wifiType} 
+                                        onChange={setWifiType}
+                                        options={[
+                                            { value: 'WPA', label: 'WPA/WPA2/WPA3' },
+                                            { value: 'WEP', label: 'WEP' },
+                                            { value: 'nopass', label: 'None' }
+                                        ]}
+                                    />
                                     <label className="checkbox-label">
                                         <input type="checkbox" checked={wifiHidden} onChange={(e) => setWifiHidden(e.target.checked)} />
                                         Hidden Network
@@ -333,29 +338,41 @@ const QRGenerator = () => {
                             <div className="shape-selectors">
                                 <div className="shape-group">
                                     <label>Dots Style</label>
-                                    <select className="qr-input shape-select" value={dotsType} onChange={(e) => setDotsType(e.target.value)}>
-                                        <option value="square">Square</option>
-                                        <option value="dots">Dots</option>
-                                        <option value="rounded">Rounded</option>
-                                        <option value="extra-rounded">Extra Rounded</option>
-                                        <option value="classy">Classy</option>
-                                        <option value="classy-rounded">Classy Rounded</option>
-                                    </select>
+                                    <CustomSelect 
+                                        value={dotsType} 
+                                        onChange={setDotsType}
+                                        options={[
+                                            { value: 'square', label: 'Square' },
+                                            { value: 'dots', label: 'Dots' },
+                                            { value: 'rounded', label: 'Rounded' },
+                                            { value: 'extra-rounded', label: 'Extra Rounded' },
+                                            { value: 'classy', label: 'Classy' },
+                                            { value: 'classy-rounded', label: 'Classy Rounded' }
+                                        ]}
+                                    />
                                 </div>
                                 <div className="shape-group">
                                     <label>Corner Squares</label>
-                                    <select className="qr-input shape-select" value={cornersSquareType} onChange={(e) => setCornersSquareType(e.target.value)}>
-                                        <option value="square">Square</option>
-                                        <option value="extra-rounded">Rounded</option>
-                                        <option value="dot">Dot</option>
-                                    </select>
+                                    <CustomSelect 
+                                        value={cornersSquareType} 
+                                        onChange={setCornersSquareType}
+                                        options={[
+                                            { value: 'square', label: 'Square' },
+                                            { value: 'extra-rounded', label: 'Rounded' },
+                                            { value: 'dot', label: 'Dot' }
+                                        ]}
+                                    />
                                 </div>
                                 <div className="shape-group">
                                     <label>Corner Dots</label>
-                                    <select className="qr-input shape-select" value={cornersDotType} onChange={(e) => setCornersDotType(e.target.value)}>
-                                        <option value="square">Square</option>
-                                        <option value="dot">Dot</option>
-                                    </select>
+                                    <CustomSelect 
+                                        value={cornersDotType} 
+                                        onChange={setCornersDotType}
+                                        options={[
+                                            { value: 'square', label: 'Square' },
+                                            { value: 'dot', label: 'Dot' }
+                                        ]}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -379,39 +396,43 @@ const QRGenerator = () => {
                                     
                                     {useGradient && (
                                         <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
-                                            <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
-                                            <div className="color-input-wrapper">
-                                                <input type="color" value={gradientColor} onChange={(e) => setGradientColor(e.target.value)} />
-                                                <span>{gradientColor}</span>
-                                            </div>
-                                            
-                                            <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
-                                                <div style={{ flex: 1 }}>
-                                                    <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
-                                                    <select className="qr-input shape-select" style={{padding: '0.5rem'}} value={fgGradientType} onChange={(e) => setFgGradientType(e.target.value)}>
-                                                        <option value="linear">Linear</option>
-                                                        <option value="radial">Radial</option>
-                                                    </select>
-                                                </div>
-                                                
-                                                {fgGradientType === 'linear' && (
-                                                    <div style={{ flex: 1 }}>
-                                                        <div className="slider-header" style={{marginBottom: '0.375rem'}}>
-                                                            <label style={{margin: 0}}>Angle</label>
-                                                            <span>{gradientAngle}°</span>
-                                                        </div>
-                                                        <input 
-                                                            type="range" 
-                                                            min="0" max="360" 
-                                                            value={gradientAngle} 
-                                                            onChange={(e) => setGradientAngle(Number(e.target.value))}
-                                                            className="styled-slider"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
+                                             <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                             <div className="color-input-wrapper">
+                                                 <input type="color" value={gradientColor} onChange={(e) => setGradientColor(e.target.value)} />
+                                                 <span>{gradientColor}</span>
+                                             </div>
+                                             
+                                             <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
+                                                 <div style={{ flex: 1 }}>
+                                                     <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                     <CustomSelect 
+                                                         value={fgGradientType} 
+                                                         onChange={setFgGradientType}
+                                                         options={[
+                                                             { value: 'linear', label: 'Linear' },
+                                                             { value: 'radial', label: 'Radial' }
+                                                         ]}
+                                                     />
+                                                 </div>
+                                                 
+                                                 {fgGradientType === 'linear' && (
+                                                     <div style={{ flex: 1 }}>
+                                                         <div className="slider-header" style={{marginBottom: '0.375rem'}}>
+                                                             <label style={{margin: 0}}>Angle</label>
+                                                             <span>{gradientAngle}°</span>
+                                                         </div>
+                                                         <input 
+                                                             type="range" 
+                                                             min="0" max="360" 
+                                                             value={gradientAngle} 
+                                                             onChange={(e) => setGradientAngle(Number(e.target.value))}
+                                                             className="styled-slider"
+                                                         />
+                                                     </div>
+                                                 )}
+                                             </div>
+                                         </div>
+                                     )}
                                 </div>
 
                                 {/* Background Colors */}
@@ -428,20 +449,24 @@ const QRGenerator = () => {
                                     
                                     {useBgGradient && (
                                         <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
-                                            <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
-                                            <div className="color-input-wrapper">
-                                                <input type="color" value={bgGradientColor} onChange={(e) => setBgGradientColor(e.target.value)} />
-                                                <span>{bgGradientColor}</span>
-                                            </div>
-                                            
-                                            <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
-                                                <div style={{ flex: 1 }}>
-                                                    <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
-                                                    <select className="qr-input shape-select" style={{padding: '0.5rem'}} value={bgGradientType} onChange={(e) => setBgGradientType(e.target.value)}>
-                                                        <option value="linear">Linear</option>
-                                                        <option value="radial">Radial</option>
-                                                    </select>
-                                                </div>
+                                             <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
+                                             <div className="color-input-wrapper">
+                                                 <input type="color" value={bgGradientColor} onChange={(e) => setBgGradientColor(e.target.value)} />
+                                                 <span>{bgGradientColor}</span>
+                                             </div>
+                                             
+                                             <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
+                                                 <div style={{ flex: 1 }}>
+                                                     <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Type</label>
+                                                     <CustomSelect 
+                                                         value={bgGradientType} 
+                                                         onChange={setBgGradientType}
+                                                         options={[
+                                                             { value: 'linear', label: 'Linear' },
+                                                             { value: 'radial', label: 'Radial' }
+                                                         ]}
+                                                     />
+                                                 </div>
                                                 
                                                 {bgGradientType === 'linear' && (
                                                     <div style={{ flex: 1 }}>

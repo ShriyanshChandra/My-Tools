@@ -30,6 +30,7 @@ import {
   runSpeedBenchmark,
   optimizeRouterPosition
 } from '../utils/networkPhysics';
+import CustomSelect from '../components/CustomSelect';
 import './NetworkMap.css';
 import '../App.css';
 
@@ -734,16 +735,17 @@ export default function NetworkMap() {
 
         <div className="net-header-actions">
           {/* Preset Selector */}
-          <select
-            className="net-select-preset"
+          <CustomSelect
             value={activePreset}
-            onChange={(e) => handleSelectPreset(e.target.value)}
-          >
-            <option value="studio">Studio Apartment</option>
-            <option value="two_bed">2-Bedroom Home</option>
-            <option value="modern_office">Modern Tech Office</option>
-            <option value="blank">Blank Canvas</option>
-          </select>
+            onChange={handleSelectPreset}
+            options={[
+              { value: 'studio', label: 'Studio Apartment' },
+              { value: 'two_bed', label: '2-Bedroom Home' },
+              { value: 'modern_office', label: 'Modern Tech Office' },
+              { value: 'blank', label: 'Blank Canvas' }
+            ]}
+            style={{ minWidth: '12rem' }}
+          />
 
           <label className="net-btn" title="Upload Blueprint or Room Photo">
             <FileImage size={16} />
@@ -819,17 +821,17 @@ export default function NetworkMap() {
             {/* Heatmap Layer Selector */}
             <div className="net-tools-group">
               <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', padding: '0 0.3rem' }}>Layer:</span>
-              <select
-                className="net-select-preset"
-                style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}
+              <CustomSelect
                 value={heatmapMode}
-                onChange={(e) => setHeatmapMode(e.target.value)}
-              >
-                <option value="bandwidth">Bandwidth (Mbps)</option>
-                <option value="latency">Latency / Ping (ms)</option>
-                <option value="signal">Signal (dBm)</option>
-                <option value="deadzones">Dead Zones Only</option>
-              </select>
+                onChange={setHeatmapMode}
+                options={[
+                  { value: 'bandwidth', label: 'Bandwidth (Mbps)' },
+                  { value: 'latency', label: 'Latency / Ping (ms)' },
+                  { value: 'signal', label: 'Signal (dBm)' },
+                  { value: 'deadzones', label: 'Dead Zones Only' }
+                ]}
+                style={{ minWidth: '11.5rem' }}
+              />
             </div>
           </div>
 

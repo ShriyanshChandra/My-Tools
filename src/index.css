@@ -15,6 +15,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Naluka';
+  src: url('/fonts/Naluka.ttf') format('truetype'),
+       url('/fonts/Naluka.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 [data-theme="neon"] {
   --font-primary: 'Outfit', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
@@ -60,6 +68,26 @@
   --dirt-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
 }
 
+[data-theme="wood"] {
+  --font-primary: 'Naluka', sans-serif;
+  --font-heading: 'Naluka', sans-serif;
+  --tracking-normal: 0.03em;
+  --tracking-heading: 0.08em;
+  --bg-primary: #d4a373;
+  --bg-image: url('/images/wood-bg.png');
+  --bg-secondary: #c28e5c;
+  --text-primary: #2d1609;
+  --text-secondary: #52311c;
+  --accent-1: #8b4513;
+  --accent-2: #5c2c10;
+  --accent-3: #a0522d;
+  --tool-accent: #6d3817;
+  --glass-bg: rgba(255, 245, 230, 0.25);
+  --glass-border: rgba(92, 44, 16, 0.25);
+  --blob-duration: 40s;
+  --blob-opacity: 0.15;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -81,18 +109,9 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* Background animated gradient blobs */
+/* Background animated gradient blobs (disabled in favor of crisp AnimatedBackground) */
 .blob-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  overflow: hidden;
-  filter: blur(7.5rem);
-  opacity: var(--blob-opacity);
-  transition: opacity 1s ease;
+  display: none;
 }
 
 .blob {
@@ -244,6 +263,324 @@ h3 {
   border-color: var(--accent-1);
   box-shadow: 0 0 0 0.25rem rgba(140, 31, 31, 0.15);
 }
+
+/* Wood Theme Specific Overrides */
+html[data-theme="wood"],
+html[data-theme="wood"] body,
+[data-theme="wood"],
+[data-theme="wood"] body,
+[data-theme="wood"] * {
+  font-family: 'Naluka', sans-serif;
+}
+
+html[data-theme="wood"] body,
+[data-theme="wood"] body {
+  background-attachment: scroll;
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #2d1609;
+}
+
+[data-theme="wood"] .blob-container {
+  display: none;
+}
+
+[data-theme="wood"] .glass,
+[data-theme="wood"] .glass-panel {
+  background: rgba(255, 245, 230, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color: rgba(92, 44, 16, 0.22);
+  box-shadow: 0 0.625rem 1.875rem rgba(60, 30, 10, 0.18), inset 0 0 1rem rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="wood"] .tool-card,
+[data-theme="wood"] .secret-tool-card,
+[data-theme="wood"] .navbar,
+[data-theme="wood"] .hero,
+[data-theme="wood"] .qr-settings-panel,
+[data-theme="wood"] .qr-preview-panel,
+[data-theme="wood"] .sound-nav,
+[data-theme="wood"] .sound-section-card,
+[data-theme="wood"] .lock-modal-card {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-theme="wood"] .tool-card {
+  background-image: url('/images/wood%20block.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 1.5rem;
+  padding: 0.125rem;
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  box-shadow: 
+    -4px 6px 12px rgba(25, 12, 5, 0.4),
+    -10px 16px 28px rgba(20, 10, 4, 0.45),
+    -18px 28px 48px rgba(15, 7, 2, 0.35),
+    inset -1px 1px 2px rgba(255, 240, 215, 0.4),
+    inset 1px -1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="wood"] .tool-card::before {
+  display: none !important;
+}
+
+[data-theme="wood"] .tool-card .card-content {
+  background: rgba(30, 15, 8, 0.08);
+  border-radius: 1.375rem;
+}
+
+[data-theme="wood"] h1,
+[data-theme="wood"] h2,
+[data-theme="wood"] h3,
+[data-theme="wood"] .logo,
+[data-theme="wood"] .qr-header h1 {
+  font-family: var(--font-heading);
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+}
+
+[data-theme="wood"] .logo span {
+  color: #1a0a03;
+  text-shadow: 
+    0 -1.5px 1px rgba(0, 0, 0, 0.95),
+    -1px 0 1px rgba(0, 0, 0, 0.6),
+    0 1.5px 1.5px rgba(255, 235, 205, 0.55),
+    -1px 1.5px 2px rgba(255, 240, 220, 0.3);
+}
+
+[data-theme="wood"] .logo-icon {
+  color: #1a0a03;
+  filter: drop-shadow(0 1.5px 1px rgba(255, 235, 205, 0.55));
+}
+
+[data-theme="wood"] .hero h1,
+[data-theme="wood"] .qr-header h1 {
+  color: #180902;
+  text-shadow: 
+    0 -2px 1.5px rgba(0, 0, 0, 0.95),
+    -1px 0 1px rgba(0, 0, 0, 0.7),
+    0 2px 2px rgba(255, 235, 205, 0.6),
+    -1px 2px 3px rgba(255, 240, 220, 0.35);
+}
+
+[data-theme="wood"] .hero p {
+  color: #3b1d0d;
+  font-weight: 500;
+  text-shadow: 
+    0 -1px 1px rgba(0, 0, 0, 0.7),
+    0 1px 1px rgba(255, 240, 220, 0.4);
+}
+
+[data-theme="wood"] .tool-card h3 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.06em;
+  color: #1a0a03;
+  text-shadow: 
+    0 -1.5px 1px rgba(0, 0, 0, 0.9),
+    -1px 0 1px rgba(0, 0, 0, 0.6),
+    0 1.5px 1.5px rgba(255, 235, 205, 0.55),
+    -1px 1.5px 2px rgba(255, 240, 220, 0.3);
+}
+
+[data-theme="wood"] .tool-card p {
+  color: #3d2111;
+  font-weight: 500;
+  text-shadow: 
+    0 -1px 1px rgba(0, 0, 0, 0.6),
+    0 1px 1px rgba(255, 240, 220, 0.4);
+}
+
+[data-theme="wood"] .tool-card .card-action {
+  color: #241106;
+  font-weight: 600;
+  text-shadow: 
+    0 -1px 1px rgba(0, 0, 0, 0.7),
+    0 1px 1px rgba(255, 235, 205, 0.45);
+}
+
+
+
+[data-theme="wood"] .card-icon-wrapper {
+  background-image: url('/images/shadow%20home%20page%20section.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1px solid rgba(80, 40, 15, 0.45) !important;
+  box-shadow: 
+    -2px 4px 10px rgba(40, 20, 8, 0.5), 
+    inset 2px 2px 0.5rem rgba(0, 0, 0, 0.5),
+    inset -1px -1px 0.3rem rgba(255, 235, 205, 0.15) !important;
+  color: #9d673d !important;
+}
+
+[data-theme="wood"] .card-icon-wrapper::after {
+  display: none;
+}
+
+[data-theme="wood"] .card-icon-wrapper svg {
+  color: #9d673d !important;
+  stroke: #9d673d !important;
+  filter: none !important;
+}
+
+[data-theme="wood"] .text-gradient {
+  background: linear-gradient(180deg, #180a03 0%, #351607 60%, #4a220c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1.5px 1.5px rgba(255, 242, 225, 0.85));
+}
+
+[data-theme="wood"] .navbar {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  box-shadow: 
+    -4px 6px 12px rgba(25, 12, 5, 0.4),
+    -10px 16px 28px rgba(20, 10, 4, 0.45),
+    -18px 28px 48px rgba(15, 7, 2, 0.35),
+    inset -1px 1px 2px rgba(255, 240, 215, 0.4),
+    inset 1px -1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="wood"] .navbar .logo span {
+  color: #180902;
+  font-family: var(--font-heading);
+  letter-spacing: var(--tracking-heading);
+  text-shadow: 
+    0 -2px 1.5px rgba(0, 0, 0, 0.95),
+    -1px 0 1px rgba(0, 0, 0, 0.7),
+    0 2px 2px rgba(255, 235, 205, 0.6),
+    -1px 2px 3px rgba(255, 240, 220, 0.35);
+}
+
+[data-theme="wood"] .navbar .logo .text-gradient {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: #180902;
+  text-shadow: 
+    0 -2px 1.5px rgba(0, 0, 0, 0.95),
+    -1px 0 1px rgba(0, 0, 0, 0.7),
+    0 2px 2px rgba(255, 235, 205, 0.6),
+    -1px 2px 3px rgba(255, 240, 220, 0.35);
+  filter: none;
+}
+
+[data-theme="wood"] .navbar .logo-icon,
+[data-theme="wood"] .logo-icon {
+  color: #180902;
+  stroke: #180902;
+  filter: drop-shadow(0 2px 1.5px rgba(255, 235, 205, 0.6));
+}
+
+[data-theme="wood"] .icon-btn,
+[data-theme="wood"] .lock-btn {
+  background-image: url('/images/shadow%20home%20page%20section.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1px solid rgba(80, 40, 15, 0.45) !important;
+  color: #9d673d !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(255, 235, 205, 0.1) !important;
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+[data-theme="wood"] .icon-btn svg,
+[data-theme="wood"] .lock-btn svg {
+  color: #9d673d !important;
+  stroke: #9d673d !important;
+  filter: none !important;
+  transition: none !important;
+}
+
+/* In Wood theme: No hover animations, no hover glows, completely static */
+[data-theme="wood"] .tool-card:hover,
+[data-theme="wood"] .icon-btn:hover,
+[data-theme="wood"] .btn:hover,
+[data-theme="wood"] .btn-primary:hover,
+[data-theme="wood"] .btn-secondary:hover,
+[data-theme="wood"] .back-link:hover,
+[data-theme="wood"] .lock-btn:hover,
+[data-theme="wood"] .lock-btn.locked:hover,
+[data-theme="wood"] .lock-btn.unlocked:hover,
+[data-theme="wood"] .tab-btn:hover,
+[data-theme="wood"] .type-btn:hover,
+[data-theme="wood"] .mode-btn:hover,
+[data-theme="wood"] .wave-btn:hover,
+[data-theme="wood"] .channel-btn:hover,
+[data-theme="wood"] .binaural-btn:hover,
+[data-theme="wood"] .isochronic-btn:hover,
+[data-theme="wood"] .preset-chip:hover,
+[data-theme="wood"] .ambient-card:hover,
+[data-theme="wood"] .play-btn:hover,
+[data-theme="wood"] .download-btn:hover,
+[data-theme="wood"] .download-btn:hover:not(:disabled),
+[data-theme="wood"] .export-btn:hover,
+[data-theme="wood"] .export-btn:hover:not(:disabled),
+[data-theme="wood"] .net-btn:hover,
+[data-theme="wood"] .net-btn-primary:hover,
+[data-theme="wood"] .net-tool-btn:hover,
+[data-theme="wood"] .material-chip:hover,
+[data-theme="wood"] .copy-action-btn:hover,
+[data-theme="wood"] .btn-icon-only:hover,
+[data-theme="wood"] .upload-btn:hover,
+[data-theme="wood"] .blueprint-upload-zone:hover,
+[data-theme="wood"] .ios-toggle-switch:hover,
+[data-theme="wood"] .styled-slider::-webkit-slider-thumb:hover,
+[data-theme="wood"] .custom-select-trigger:hover,
+[data-theme="wood"] .custom-select-option:hover,
+[data-theme="wood"] .card-icon-wrapper:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+[data-theme="wood"] .btn-primary:hover::before,
+[data-theme="wood"] .tool-card:hover::before {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+[data-theme="wood"] .tool-card:hover {
+  box-shadow: 
+    -4px 6px 12px rgba(25, 12, 5, 0.4),
+    -10px 16px 28px rgba(20, 10, 4, 0.45),
+    -18px 28px 48px rgba(15, 7, 2, 0.35),
+    inset -1px 1px 2px rgba(255, 240, 215, 0.4),
+    inset 1px -1px 3px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(100, 50, 20, 0.35) !important;
+}
+
+[data-theme="wood"] .tool-card:hover .card-action {
+  gap: 0.5rem !important;
+  color: #2f1709 !important;
+}
+
+[data-theme="wood"] .tool-card:hover .card-content {
+  background: rgba(30, 15, 8, 0.08) !important;
+}
+
+[data-theme="wood"] .icon-btn:hover,
+[data-theme="wood"] .lock-btn:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png') !important;
+  border: 1px solid rgba(80, 40, 15, 0.45) !important;
+  color: #9d673d !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(255, 235, 205, 0.1) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+[data-theme="wood"] input::placeholder,
+[data-theme="wood"] textarea::placeholder {
+  color: rgba(255, 248, 238, 0.55);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
 
 /* Base button */
 .btn {

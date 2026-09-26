@@ -1,0 +1,39 @@
+/* Synaptic Neural Network Background */
+.animated-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #030014;
+  transition: opacity 0.5s ease;
+}
+
+.animated-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Subtle corner radial depth gradients */
+.animated-bg-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(3, 0, 20, 0.72) 100%);
+}
+
+/* Hide for non-default themes */
+[data-theme="tlou"] .animated-bg-container,
+[data-theme="wood"] .animated-bg-container {
+  display: none;
+}

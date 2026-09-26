@@ -1,0 +1,358 @@
+import React, { useEffect, useRef, useState } from 'react';
+import './AnimatedBackground.css';
+
+// Default theme color tokens
+const THEME_COLORS = {
+  cyan: { r: 0, g: 210, b: 255 },       // #00d2ff
+  magenta: { r: 255, g: 42, b: 133 },   // #ff2a85
+  violet: { r: 138, g: 43, b: 226 },    // #8a2be2
+  mint: { r: 0, g: 250, b: 154 },       // #00FA9A
+  indigo: { r: 67, g: 97, b: 238 }      // #4361ee
+};
+
+const AnimatedBackground = () => {
+  const canvasRef = useRef(null);
+  const [isDefaultTheme, setIsDefaultTheme] = useState(true);
+
+  // Monitor active theme changes
+  useEffect(() => {
+    const checkTheme = () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'neon';
+      setIsDefaultTheme(current === 'neon');
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          checkTheme();
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    const handleStorage = (e) => {
+      if (e.key === 'app-theme') {
+        checkTheme();
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
+
+  // Crisp Unblurred Animated Gradient Wave Canvas Engine
+  useEffect(() => {
+    if (!isDefaultTheme) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId = null;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resizeCanvas = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Layered Crisp Gradient Ribbon Configurations
+    const ribbons = [
+      {
+        baseYRatio: 0.22,
+        amp1: 50,
+        amp2: 32,
+        amp3: 18,
+        freq1: 0.0018,
+        freq2: 0.0032,
+        freq3: 0.0010,
+        speed1: 0.00045,
+        speed2: -0.00065,
+        speed3: 0.00025,
+        phase: 0,
+        fillGradient: (c, baseY) => {
+          const g = c.createLinearGradient(0, baseY - 60, 0, baseY + 260);
+          g.addColorStop(0, 'rgba(0, 210, 255, 0.40)');
+          g.addColorStop(0.35, 'rgba(67, 97, 238, 0.22)');
+          g.addColorStop(0.8, 'rgba(138, 43, 226, 0.08)');
+          g.addColorStop(1, 'rgba(3, 0, 20, 0)');
+          return g;
+        },
+        strokeColor: 'rgba(0, 210, 255, 0.90)',
+        strokeWidth: 2,
+        contourOffsets: [-15, 15],
+        contourAlpha: 0.22,
+        nodeColor: THEME_COLORS.cyan
+      },
+      {
+        baseYRatio: 0.42,
+        amp1: 65,
+        amp2: 40,
+        amp3: 22,
+        freq1: 0.0014,
+        freq2: 0.0024,
+        freq3: 0.0035,
+        speed1: -0.00050,
+        speed2: 0.00040,
+        speed3: -0.00070,
+        phase: 1.8,
+        fillGradient: (c, baseY) => {
+          const g = c.createLinearGradient(0, baseY - 80, 0, baseY + 280);
+          g.addColorStop(0, 'rgba(255, 42, 133, 0.38)');
+          g.addColorStop(0.4, 'rgba(138, 43, 226, 0.20)');
+          g.addColorStop(0.85, 'rgba(67, 97, 238, 0.06)');
+          g.addColorStop(1, 'rgba(3, 0, 20, 0)');
+          return g;
+        },
+        strokeColor: 'rgba(255, 42, 133, 0.92)',
+        strokeWidth: 2,
+        contourOffsets: [-18, 18],
+        contourAlpha: 0.24,
+        nodeColor: THEME_COLORS.magenta
+      },
+      {
+        baseYRatio: 0.62,
+        amp1: 58,
+        amp2: 36,
+        amp3: 20,
+        freq1: 0.0022,
+        freq2: 0.0016,
+        freq3: 0.0028,
+        speed1: 0.00060,
+        speed2: -0.00035,
+        speed3: 0.00050,
+        phase: 3.4,
+        fillGradient: (c, baseY) => {
+          const g = c.createLinearGradient(0, baseY - 70, 0, baseY + 270);
+          g.addColorStop(0, 'rgba(138, 43, 226, 0.42)');
+          g.addColorStop(0.35, 'rgba(0, 210, 255, 0.18)');
+          g.addColorStop(0.8, 'rgba(0, 250, 154, 0.06)');
+          g.addColorStop(1, 'rgba(3, 0, 20, 0)');
+          return g;
+        },
+        strokeColor: 'rgba(138, 43, 226, 0.95)',
+        strokeWidth: 2,
+        contourOffsets: [-16, 16],
+        contourAlpha: 0.25,
+        nodeColor: THEME_COLORS.violet
+      },
+      {
+        baseYRatio: 0.80,
+        amp1: 48,
+        amp2: 28,
+        amp3: 16,
+        freq1: 0.0016,
+        freq2: 0.0030,
+        freq3: 0.0012,
+        speed1: -0.00040,
+        speed2: 0.00055,
+        speed3: -0.00030,
+        phase: 5.1,
+        fillGradient: (c, baseY) => {
+          const g = c.createLinearGradient(0, baseY - 60, 0, baseY + 240);
+          g.addColorStop(0, 'rgba(0, 250, 154, 0.35)');
+          g.addColorStop(0.35, 'rgba(0, 210, 255, 0.18)');
+          g.addColorStop(0.75, 'rgba(67, 97, 238, 0.06)');
+          g.addColorStop(1, 'rgba(3, 0, 20, 0)');
+          return g;
+        },
+        strokeColor: 'rgba(0, 250, 154, 0.88)',
+        strokeWidth: 2,
+        contourOffsets: [-14, 14],
+        contourAlpha: 0.20,
+        nodeColor: THEME_COLORS.mint
+      },
+      {
+        // Counter-diagonal harmonic wave intersecting through other layers
+        baseYRatio: 0.50,
+        amp1: 70,
+        amp2: 45,
+        amp3: 25,
+        freq1: 0.0012,
+        freq2: 0.0020,
+        freq3: 0.0032,
+        speed1: 0.00035,
+        speed2: 0.00065,
+        speed3: -0.00045,
+        phase: 2.7,
+        fillGradient: (c, baseY) => {
+          const g = c.createLinearGradient(0, baseY - 90, 0, baseY + 300);
+          g.addColorStop(0, 'rgba(255, 42, 133, 0.28)');
+          g.addColorStop(0.4, 'rgba(0, 210, 255, 0.15)');
+          g.addColorStop(0.8, 'rgba(138, 43, 226, 0.05)');
+          g.addColorStop(1, 'rgba(3, 0, 20, 0)');
+          return g;
+        },
+        strokeColor: 'rgba(255, 42, 133, 0.85)',
+        strokeWidth: 1.8,
+        contourOffsets: [-20, 20],
+        contourAlpha: 0.18,
+        nodeColor: THEME_COLORS.magenta
+      }
+    ];
+
+    // Helper to calculate wave Y coordinate at position x
+    const getWaveY = (x, time, r) => {
+      const baseY = height * r.baseYRatio;
+      return (
+        baseY +
+        Math.sin(x * r.freq1 + time * r.speed1 + r.phase) * r.amp1 +
+        Math.cos(x * r.freq2 + time * r.speed2) * r.amp2 +
+        Math.sin(x * r.freq3 + time * r.speed3) * r.amp3
+      );
+    };
+
+    // Main Render Loop
+    const render = (time) => {
+      // 1. Crisp base background gradient with slight angular shift
+      const bgGrad = ctx.createLinearGradient(
+        0,
+        0,
+        width * (0.8 + Math.sin(time * 0.0001) * 0.2),
+        height * (0.9 + Math.cos(time * 0.00012) * 0.1)
+      );
+      bgGrad.addColorStop(0, '#030014');
+      bgGrad.addColorStop(0.5, '#0a0524');
+      bgGrad.addColorStop(1, '#050118');
+
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      const step = 6; // High precision step for crisp curves
+
+      // 2. Render Each Crisp Liquid Gradient Ribbon Layer
+      for (let i = 0; i < ribbons.length; i++) {
+        const r = ribbons[i];
+        const baseY = height * r.baseYRatio;
+
+        // Draw Filled Ribbon Polygon
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+
+        for (let x = 0; x <= width + step; x += step) {
+          const y = getWaveY(x, time, r);
+          if (x === 0) {
+            ctx.lineTo(0, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+
+        ctx.lineTo(width, height);
+        ctx.closePath();
+
+        ctx.fillStyle = r.fillGradient(ctx, baseY);
+        ctx.fill();
+
+        // Draw Secondary Crisp Topographic Contour Lines
+        for (let c = 0; c < r.contourOffsets.length; c++) {
+          const offset = r.contourOffsets[c];
+          ctx.beginPath();
+          for (let x = 0; x <= width + step; x += step) {
+            const y = getWaveY(x, time, r) + offset;
+            if (x === 0) {
+              ctx.moveTo(0, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+          ctx.strokeStyle = `rgba(${r.nodeColor.r}, ${r.nodeColor.g}, ${r.nodeColor.b}, ${r.contourAlpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Draw Main Crisp Vector Stroke along the Wave Crest
+        ctx.beginPath();
+        for (let x = 0; x <= width + step; x += step) {
+          const y = getWaveY(x, time, r);
+          if (x === 0) {
+            ctx.moveTo(0, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.strokeStyle = r.strokeColor;
+        ctx.lineWidth = r.strokeWidth;
+        ctx.stroke();
+
+        // Draw Crisp Traveling Light Nodes along the Wave
+        const nodeCount = 3;
+        for (let n = 0; n < nodeCount; n++) {
+          const nodeProgress = ((time * 0.00015 * (n + 1) + (i * 0.3) + (n * 0.33)) % 1);
+          const nodeX = nodeProgress * width;
+          const nodeY = getWaveY(nodeX, time, r);
+
+          ctx.beginPath();
+          ctx.arc(nodeX, nodeY, 3, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(nodeX, nodeY, 5.5, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${r.nodeColor.r}, ${r.nodeColor.g}, ${r.nodeColor.b}, 0.85)`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      } else {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    animationFrameId = requestAnimationFrame(render);
+
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isDefaultTheme]);
+
+  if (!isDefaultTheme) return null;
+
+  return (
+    <div className="animated-bg-container" aria-hidden="true">
+      {/* High-definition crisp gradient canvas */}
+      <canvas ref={canvasRef} className="animated-bg-canvas" />
+
+      {/* Crisp geometric grid overlay */}
+      <div className="animated-bg-grid" />
+
+      {/* Crisp edge vignette */}
+      <div className="animated-bg-vignette" />
+    </div>
+  );
+};
+
+export default AnimatedBackground;

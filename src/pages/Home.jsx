@@ -33,7 +33,9 @@ function Home() {
   });
 
   const toggleTheme = () => {
-    const newTheme = theme === 'neon' ? 'tlou' : 'neon';
+    const themeCycle = ['neon', 'tlou', 'wood'];
+    const nextIndex = (themeCycle.indexOf(theme) + 1) % themeCycle.length;
+    const newTheme = themeCycle[nextIndex];
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('app-theme', newTheme);
@@ -264,8 +266,8 @@ function Home() {
                 key={tool.id}
                 className={`tool-card ${hiddenStatus ? 'secret-tool-card' : ''}`}
                 style={{ animationDelay: tool.delay, textDecoration: 'none' }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                onMouseEnter={() => { if (theme !== 'wood') setHoveredIndex(index); }}
+                onMouseLeave={() => { if (theme !== 'wood') setHoveredIndex(null); }}
               >
                 <div className="card-content">
                   {/* Visibility Switch Toggle - Visible ONLY when unlocked */}
@@ -294,8 +296,8 @@ function Home() {
                   <div
                     className="card-icon-wrapper"
                     style={{
-                      boxShadow: hoveredIndex === index ? `0 0 1.25rem ${tool.color}40` : 'none',
-                      borderColor: hoveredIndex === index ? `${tool.color}50` : 'rgba(255,255,255,0.05)'
+                      boxShadow: (theme !== 'wood' && hoveredIndex === index) ? `0 0 1.25rem ${tool.color}40` : undefined,
+                      borderColor: (theme !== 'wood' && hoveredIndex === index) ? `${tool.color}50` : undefined
                     }}
                   >
                     {tool.icon}

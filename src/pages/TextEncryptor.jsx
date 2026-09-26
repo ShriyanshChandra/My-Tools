@@ -70,9 +70,9 @@ const TextEncryptor = () => {
 
       const base64 = btoa(String.fromCharCode(...combined));
       setOutputText(base64);
-      setStatusMsg('🔒 Text encrypted successfully with AES-256!');
+      setStatusMsg('Text encrypted successfully with AES-256');
     } catch (err) {
-      setStatusMsg('❌ Encryption failed: ' + err.message);
+      setStatusMsg('Encryption failed: ' + err.message);
     }
   };
 
@@ -101,9 +101,9 @@ const TextEncryptor = () => {
 
       const dec = new TextDecoder();
       setOutputText(dec.decode(decrypted));
-      setStatusMsg('🔓 Text decrypted successfully!');
+      setStatusMsg('Text decrypted successfully');
     } catch {
-      setStatusMsg('❌ Decryption failed. Incorrect key or corrupted payload.');
+      setStatusMsg('Decryption failed. Incorrect key or corrupted payload.');
     }
   };
 

@@ -29,3 +29,7 @@ server/serviceAccountKey.json
 *.njsproj
 *.sln
 *.sw?
+
+# Experiments
+experiment/
+experiments/

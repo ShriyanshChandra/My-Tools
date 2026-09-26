@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AnimatedBackground from './components/AnimatedBackground';
 import Home from './pages/Home';
 import QRGenerator from './pages/QRGenerator';
 import SoundGenerator from './pages/SoundGenerator';
@@ -9,6 +10,7 @@ import NetworkMap from './pages/NetworkMap';
 function App() {
   return (
     <BrowserRouter>
+      <AnimatedBackground />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/qr" element={<QRGenerator />} />

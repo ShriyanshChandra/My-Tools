@@ -22,6 +22,7 @@ import {
   Flame,
   Wind
 } from 'lucide-react';
+import CustomSelect from '../components/CustomSelect';
 import './SoundGenerator.css';
 
 const PRESETS = [
@@ -364,7 +365,9 @@ const SoundGenerator = () => {
   const [theme, setTheme] = useState(localStorage.getItem('app-theme') || 'neon');
 
   const toggleTheme = () => {
-    const newTheme = theme === 'neon' ? 'tlou' : 'neon';
+    const themeCycle = ['neon', 'tlou', 'wood'];
+    const nextIndex = (themeCycle.indexOf(theme) + 1) % themeCycle.length;
+    const newTheme = themeCycle[nextIndex];
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('app-theme', newTheme);
@@ -1862,17 +1865,18 @@ const SoundGenerator = () => {
             <div className="export-controls">
               <div className="duration-select">
                 <label>Duration:</label>
-                <select
+                <CustomSelect
                   value={exportDuration}
-                  onChange={(e) => setExportDuration(parseInt(e.target.value, 10))}
-                  className="sound-select"
-                >
-                  <option value={1}>1 Second</option>
-                  <option value={5}>5 Seconds</option>
-                  <option value={10}>10 Seconds</option>
-                  <option value={30}>30 Seconds</option>
-                  <option value={60}>60 Seconds (1 Minute)</option>
-                </select>
+                  onChange={(val) => setExportDuration(parseInt(val, 10))}
+                  options={[
+                    { value: 1, label: '1 Second' },
+                    { value: 5, label: '5 Seconds' },
+                    { value: 10, label: '10 Seconds' },
+                    { value: 30, label: '30 Seconds' },
+                    { value: 60, label: '60 Seconds (1 Minute)' }
+                  ]}
+                  style={{ minWidth: '11rem' }}
+                />
               </div>
               <button
                 className="btn btn-primary export-btn"

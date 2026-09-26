@@ -290,7 +290,7 @@ html[data-theme="tlou"] body.qr-page-active {
     margin-top: 1.25rem;
     font-weight: 700;
     font-size: 1.25rem;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Space Grotesk', sans-serif !important;
     word-break: break-all;
     letter-spacing: -0.0313rem;
 }
@@ -435,4 +435,248 @@ html[data-theme="tlou"] body.qr-page-active {
 .shape-select:focus {
     border-color: var(--accent-3);
     box-shadow: 0 0 0 0.25rem rgba(0, 210, 255, 0.15);
+}
+
+/* ==========================================================================
+   Wood Theme Overrides for QR Generator
+   ========================================================================== */
+html[data-theme="wood"] body.qr-page-active {
+    background-attachment: scroll;
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+[data-theme="wood"] .qr-generator-page .back-link {
+    color: #4a2815;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.5);
+}
+
+[data-theme="wood"] .qr-generator-page .back-link:hover {
+    color: #4a2815;
+    transform: none;
+}
+
+[data-theme="wood"] .qr-settings-panel {
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(100, 50, 20, 0.35);
+    box-shadow: 
+      -4px 6px 12px rgba(25, 12, 5, 0.4),
+      -10px 16px 28px rgba(20, 10, 4, 0.45),
+      -18px 28px 48px rgba(15, 7, 2, 0.35),
+      inset -1px 1px 2px rgba(255, 240, 215, 0.4),
+      inset 1px -1px 3px rgba(0, 0, 0, 0.3);
+    color: #241106;
+}
+
+[data-theme="wood"] .qr-display-area {
+    box-shadow: 
+      -4px 6px 12px rgba(25, 12, 5, 0.35),
+      -10px 16px 28px rgba(20, 10, 4, 0.35),
+      -18px 28px 48px rgba(15, 7, 2, 0.25);
+    border: 1px solid rgba(100, 50, 20, 0.2);
+}
+
+[data-theme="wood"] .type-btn {
+    background-image: url('/images/shadow%20home%20page%20section.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #9d673d;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3), inset 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    font-family: var(--font-heading);
+    letter-spacing: 0.04em;
+}
+
+[data-theme="wood"] .type-btn:hover {
+    background-image: url('/images/shadow%20home%20page%20section.png');
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #9d673d;
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3), inset 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    transform: none;
+}
+
+[data-theme="wood"] .type-btn.active {
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(198, 139, 89, 0.85);
+    color: #241106;
+    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+    box-shadow: 0 4px 12px rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.2);
+    font-weight: 700;
+}
+
+[data-theme="wood"] .type-btn.active:hover {
+    background-image: url('/images/wood-block.png');
+    border-color: rgba(198, 139, 89, 0.85);
+    color: #241106;
+    box-shadow: 0 4px 12px rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="wood"] .qr-input,
+[data-theme="wood"] .shape-select {
+    background-image: url('/images/shadow%20home%20page%20section.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(80, 40, 15, 0.45);
+    color: #9d673d;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(255, 235, 205, 0.1);
+    font-family: var(--font-heading);
+    letter-spacing: 0.03em;
+}
+
+[data-theme="wood"] .qr-input::placeholder,
+[data-theme="wood"] .qr-textarea::placeholder {
+    color: rgba(157, 103, 61, 0.65);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .qr-input:focus,
+[data-theme="wood"] .shape-select:focus {
+    border-color: rgba(198, 139, 89, 0.85);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 0 0.5rem rgba(198, 139, 89, 0.35);
+}
+
+[data-theme="wood"] .shape-select option {
+    background: #241106;
+    color: #9d673d;
+}
+
+[data-theme="wood"] .color-input-wrapper {
+    background-image: url('/images/shadow%20home%20page%20section.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(80, 40, 15, 0.45);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+    color: #9d673d;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .section-title {
+    color: #1a0a03;
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+    text-shadow: 
+      0 -1.5px 1px rgba(0, 0, 0, 0.9),
+      -1px 0 1px rgba(0, 0, 0, 0.6),
+      0 1.5px 1.5px rgba(255, 235, 205, 0.55);
+    text-transform: uppercase;
+}
+
+[data-theme="wood"] .section-title svg {
+    color: #1a0a03;
+    stroke: #1a0a03;
+    filter: drop-shadow(0 1.5px 1px rgba(255, 235, 205, 0.55));
+}
+
+[data-theme="wood"] .color-picker-group label,
+[data-theme="wood"] .shape-group label,
+[data-theme="wood"] .slider-header,
+[data-theme="wood"] .checkbox-label {
+    color: #3b1d0d;
+    font-weight: 500;
+    text-shadow: 
+      0 -1px 1px rgba(0, 0, 0, 0.6),
+      0 1px 1px rgba(255, 240, 220, 0.4);
+}
+
+[data-theme="wood"] .upload-btn {
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
+    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+    font-family: var(--font-heading);
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
+    font-weight: 600;
+}
+
+[data-theme="wood"] .upload-btn:hover {
+    background-image: url('/images/wood-block.png');
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
+    transform: none;
+}
+
+[data-theme="wood"] .slider-group {
+    background-image: url('/images/shadow%20home%20page%20section.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(80, 40, 15, 0.45);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="wood"] .slider-group .slider-header label,
+[data-theme="wood"] .slider-group .slider-header span {
+    color: #9d673d;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .color-picker-group div[style*="background"] {
+    background-image: url('/images/shadow%20home%20page%20section.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border: 1px solid rgba(80, 40, 15, 0.45) !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+    color: #9d673d !important;
+}
+
+[data-theme="wood"] .color-picker-group div[style*="background"] label,
+[data-theme="wood"] .color-picker-group div[style*="background"] span {
+    color: #9d673d !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .styled-slider {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="wood"] .styled-slider::-webkit-slider-thumb {
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    border: 1px solid rgba(198, 139, 89, 0.8);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="wood"] .styled-slider::-webkit-slider-thumb:hover {
+    transform: none;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="wood"] .download-btn {
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
+    font-family: var(--font-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+    box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="wood"] .download-btn:hover:not(:disabled),
+[data-theme="wood"] .download-btn:hover {
+    background-image: url('/images/wood-block.png');
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
+    box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+    transform: none;
+}
+
+[data-theme="wood"] .download-btn svg {
+    color: #241106;
+    stroke: #241106;
 }

@@ -855,3 +855,429 @@
   color: var(--text-primary);
   background: rgba(0, 210, 255, 0.05);
 }
+
+/* ==========================================================================
+   Wood Theme Overrides for Network Map
+   ========================================================================== */
+[data-theme="wood"] .net-header {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.4);
+  box-shadow: 0 0.625rem 1.875rem rgba(40, 20, 8, 0.35), inset 0 0 1.25rem rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="wood"] .net-header .back-link {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  font-family: var(--font-heading);
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
+}
+
+[data-theme="wood"] .net-header .back-link:hover {
+  background-image: url('/images/wood-block.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
+  transform: none;
+}
+
+[data-theme="wood"] .net-title-group h1 {
+  color: #1a0a03;
+  font-family: var(--font-heading);
+  text-shadow: 
+    0 -1.5px 1px rgba(0, 0, 0, 0.95),
+    -1px 0 1px rgba(0, 0, 0, 0.6),
+    0 1.5px 1.5px rgba(255, 235, 205, 0.55),
+    -1px 1.5px 2px rgba(255, 240, 220, 0.3);
+}
+
+[data-theme="wood"] .net-title-group h1 svg {
+  color: #1a0a03;
+  stroke: #1a0a03;
+  filter: drop-shadow(0 1.5px 1px rgba(255, 235, 205, 0.55));
+}
+
+[data-theme="wood"] .net-title-group p {
+  color: #9d673d;
+  font-weight: 500;
+}
+
+[data-theme="wood"] .live-badge {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  border: 1px solid rgba(100, 50, 20, 0.4);
+  color: #241106;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+}
+
+[data-theme="wood"] .live-badge-dot {
+  background: #241106;
+  box-shadow: 0 0 6px #241106;
+}
+
+[data-theme="wood"] .net-viewport-card,
+[data-theme="wood"] .net-card,
+[data-theme="wood"] .net-workspace {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  box-shadow: 
+    -4px 6px 12px rgba(25, 12, 5, 0.4),
+    -10px 16px 28px rgba(20, 10, 4, 0.45),
+    -18px 28px 48px rgba(15, 7, 2, 0.35),
+    inset -1px 1px 2px rgba(255, 240, 215, 0.4),
+    inset 1px -1px 3px rgba(0, 0, 0, 0.3);
+  color: #241106;
+}
+
+[data-theme="wood"] .net-card-header h2 {
+  color: #1a0a03;
+  font-family: var(--font-heading);
+  letter-spacing: 0.04em;
+  text-shadow: 
+    0 -1.5px 1px rgba(0, 0, 0, 0.9),
+    -1px 0 1px rgba(0, 0, 0, 0.6),
+    0 1.5px 1.5px rgba(255, 235, 205, 0.55);
+  text-transform: uppercase;
+}
+
+[data-theme="wood"] .net-card-header svg {
+  color: #1a0a03;
+  stroke: #1a0a03;
+  filter: drop-shadow(0 1.5px 1px rgba(255, 235, 205, 0.55));
+}
+
+[data-theme="wood"] .net-btn {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3);
+  font-family: var(--font-heading);
+  letter-spacing: 0.03em;
+}
+
+[data-theme="wood"] .net-btn:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3);
+  transform: none;
+}
+
+[data-theme="wood"] .net-btn-primary {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+  box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="wood"] .net-btn-primary:hover {
+  background-image: url('/images/wood-block.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+  transform: none;
+}
+
+[data-theme="wood"] .net-btn-primary svg {
+  color: #241106;
+  stroke: #241106;
+}
+
+[data-theme="wood"] .net-toolbar {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.45);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="wood"] .net-tool-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  color: #9d673d;
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .net-tool-btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  color: #9d673d;
+  transform: none;
+}
+
+[data-theme="wood"] .net-tool-btn.active {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  background-position: center;
+  border-color: rgba(198, 139, 89, 0.85);
+  color: #241106;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+  box-shadow: 0 3px 8px rgba(40, 20, 8, 0.4);
+  font-weight: 700;
+}
+
+[data-theme="wood"] .net-tool-btn.active:hover {
+  background-image: url('/images/wood-block.png');
+  border-color: rgba(198, 139, 89, 0.85);
+  color: #241106;
+  box-shadow: 0 3px 8px rgba(40, 20, 8, 0.4);
+  transform: none;
+}
+
+[data-theme="wood"] .net-tool-btn.active svg {
+  color: #241106;
+  stroke: #241106;
+}
+
+[data-theme="wood"] .material-chip {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .material-chip:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  transform: none;
+}
+
+[data-theme="wood"] .material-chip.active {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  border-color: rgba(198, 139, 89, 0.85);
+  color: #241106;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+}
+
+[data-theme="wood"] .material-chip.active:hover {
+  background-image: url('/images/wood-block.png');
+  border-color: rgba(198, 139, 89, 0.85);
+  color: #241106;
+  transform: none;
+}
+
+[data-theme="wood"] .router-card {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.45);
+  box-shadow: 0 2px 8px rgba(40, 20, 8, 0.35);
+  color: #9d673d;
+}
+
+[data-theme="wood"] .router-card.active-router-card {
+  border-color: rgba(198, 139, 89, 0.95);
+  box-shadow: 0 0 1rem rgba(198, 139, 89, 0.35), inset 0 0 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="wood"] .router-card-title {
+  color: #9d673d;
+  font-family: var(--font-heading);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .stat-chip {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(100, 50, 20, 0.35);
+  color: #9d673d;
+}
+
+[data-theme="wood"] .net-input,
+[data-theme="wood"] .spot-name-input {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.45);
+  color: #9d673d;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .net-input::placeholder,
+[data-theme="wood"] .spot-name-input::placeholder {
+  color: rgba(157, 103, 61, 0.65);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .samples-table-wrapper {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.45);
+}
+
+[data-theme="wood"] .sample-row {
+  border-bottom: 1px solid rgba(100, 50, 20, 0.35);
+  color: #9d673d;
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .sample-row:hover {
+  background: transparent;
+  color: #9d673d;
+}
+
+[data-theme="wood"] .sample-mbps-pill {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  color: #241106;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.6);
+}
+
+[data-theme="wood"] .stat-box {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(80, 40, 15, 0.45);
+  color: #9d673d;
+}
+
+[data-theme="wood"] .stat-box.clickable:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  border: 1px solid rgba(80, 40, 15, 0.45);
+  color: #9d673d;
+  transform: none;
+}
+
+[data-theme="wood"] .net-tool-tab {
+  color: #deb887;
+}
+
+[data-theme="wood"] .net-tool-tab:hover {
+  background: transparent;
+  color: #deb887;
+  transform: none;
+}
+
+[data-theme="wood"] .net-tool-tab.active {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  border: 1px solid rgba(198, 139, 89, 0.85);
+  color: #241106;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.6);
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.35);
+}
+
+[data-theme="wood"] .net-tool-tab.active:hover {
+  background-image: url('/images/wood-block.png');
+  color: #241106;
+  transform: none;
+}
+
+[data-theme="wood"] .btn-sample-run {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+  box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="wood"] .btn-sample-run:hover {
+  background-image: url('/images/wood-block.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  box-shadow: 0 0.5rem 1.5rem rgba(40, 20, 8, 0.4), inset 0 0 0.5rem rgba(0, 0, 0, 0.15);
+  transform: none;
+}
+
+[data-theme="wood"] .net-btn-download,
+[data-theme="wood"] .net-btn-upload {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3);
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .net-btn-download:hover:not(:disabled),
+[data-theme="wood"] .net-btn-download:hover,
+[data-theme="wood"] .net-btn-upload:hover:not(:disabled),
+[data-theme="wood"] .net-btn-upload:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  box-shadow: 0 2px 6px rgba(40, 20, 8, 0.3);
+  transform: none;
+}
+
+[data-theme="wood"] .canvas-icon-btn {
+  background-image: url('/images/wood-block.png');
+  background-size: cover;
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+}
+
+[data-theme="wood"] .canvas-icon-btn:hover {
+  background-image: url('/images/wood-block.png');
+  border: 1px solid rgba(100, 50, 20, 0.45);
+  color: #241106;
+  transform: none;
+}
+
+[data-theme="wood"] .optimizer-box {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px dashed rgba(198, 139, 89, 0.6);
+  color: #9d673d;
+  font-family: var(--font-heading);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="wood"] .optimizer-box strong {
+  color: #deb887;
+}
+
+[data-theme="wood"] .blueprint-upload-zone {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px dashed rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  font-family: var(--font-heading);
+}
+
+[data-theme="wood"] .blueprint-upload-zone:hover {
+  background-image: url('/images/shadow%20home%20page%20section.png');
+  border: 1px dashed rgba(100, 50, 20, 0.45);
+  color: #9d673d;
+  transform: none;
+}
+
+[data-theme="wood"] .btn-icon-del:hover,
+[data-theme="wood"] .net-btn-danger:hover {
+  transform: none;
+}
