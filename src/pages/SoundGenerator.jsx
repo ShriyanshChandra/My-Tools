@@ -365,7 +365,7 @@ const SoundGenerator = () => {
   const [theme, setTheme] = useState(localStorage.getItem('app-theme') || 'neon');
 
   const toggleTheme = () => {
-    const themeCycle = ['neon', 'tlou', 'wood'];
+    const themeCycle = ['neon', 'tlou', 'wood', 'maple', 'snow', 'heisenberg', 'ghibli', 'tokyo'];
     const nextIndex = (themeCycle.indexOf(theme) + 1) % themeCycle.length;
     const newTheme = themeCycle[nextIndex];
     setTheme(newTheme);

@@ -23,21 +23,24 @@
 }
 
 .sound-nav .back-link {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  display: flex;
+  position: relative;
+  top: auto;
+  left: auto;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.125rem;
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   z-index: 20;
 }
@@ -45,7 +48,9 @@
 .sound-nav .back-link:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.1);
-  transform: translateX(-0.1875rem);
+  border-color: var(--accent-3, #00d2ff);
+  box-shadow: 0 0.25rem 1rem rgba(0, 210, 255, 0.25);
+  transform: translateY(-0.0625rem);
 }
 
 .sound-nav-title {

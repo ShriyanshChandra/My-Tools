@@ -36,6 +36,13 @@
   --accent-2: #8a2be2;
   --accent-3: #00d2ff;
   --tool-accent: #00FA9A;
+  --tool-qr-color: #00d2ff;
+  --tool-sound-color: #ff2a85;
+  --tool-net-color: #00fa9a;
+  --tool-crypt-color: #8a2be2;
+  --cursor-dot: #00d2ff;
+  --cursor-ring: #ff2a85;
+  --cursor-glow: rgba(0, 210, 255, 0.15);
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
   --blob-duration: 20s;
@@ -59,6 +66,13 @@
   --accent-3: #8a9950;
   /* Spore yellow/green */
   --tool-accent: var(--accent-1);
+  --tool-qr-color: #c44536;
+  --tool-sound-color: #d48b47;
+  --tool-net-color: #6b8f71;
+  --tool-crypt-color: #c9a96e;
+  --cursor-dot: #c44536;
+  --cursor-ring: #8a9950;
+  --cursor-glow: rgba(140, 31, 31, 0.2);
   --glass-bg: rgba(20, 25, 22, 0.4);
   --glass-border: rgba(140, 31, 31, 0.15);
   /* Subtle red border */
@@ -82,10 +96,152 @@
   --accent-2: #5c2c10;
   --accent-3: #a0522d;
   --tool-accent: #6d3817;
+  --tool-qr-color: #5c2c10;
+  --tool-sound-color: #8b4513;
+  --tool-net-color: #4a3520;
+  --tool-crypt-color: #6d3817;
+  --cursor-dot: #4a2810;
+  --cursor-ring: #8b4513;
+  --cursor-glow: rgba(139, 69, 19, 0.15);
   --glass-bg: rgba(255, 245, 230, 0.25);
   --glass-border: rgba(92, 44, 16, 0.25);
   --blob-duration: 40s;
   --blob-opacity: 0.15;
+}
+
+[data-theme="maple"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: -0.03rem;
+  --bg-primary: #140804;
+  --bg-image: url('/images/maple-tree-bg.jpg');
+  --bg-secondary: #221008;
+  --text-primary: #f5e6d3;
+  --text-secondary: #c4a882;
+  --accent-1: #c4521a;
+  --accent-2: #8b1a1a;
+  --accent-3: #c8860f;
+  --tool-accent: #d4521a;
+  --tool-qr-color: #ff7a18;
+  --tool-sound-color: #e08a00;
+  --tool-net-color: #d62828;
+  --tool-crypt-color: #e07a5f;
+  --cursor-dot: #ffc107;
+  --cursor-ring: #ff5400;
+  --cursor-glow: rgba(255, 122, 24, 0.18);
+  --glass-bg: rgba(26, 10, 4, 0.65);
+  --glass-border: rgba(196, 82, 26, 0.22);
+  --blob-duration: 30s;
+  --blob-opacity: 0.1;
+}
+
+[data-theme="snow"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: -0.03rem;
+  --bg-primary: #050d18;
+  --bg-image: url('/images/snowy-mountain-bg.jpg');
+  --bg-secondary: #0a1626;
+  --text-primary: #f0f7ff;
+  --text-secondary: #93b5d6;
+  --accent-1: #38bdf8;
+  --accent-2: #0284c7;
+  --accent-3: #7dd3fc;
+  --tool-accent: #38bdf8;
+  --tool-qr-color: #38bdf8;
+  --tool-sound-color: #7dd3fc;
+  --tool-net-color: #67e8f9;
+  --tool-crypt-color: #a5f3fc;
+  --cursor-dot: #ffffff;
+  --cursor-ring: #38bdf8;
+  --cursor-glow: rgba(56, 189, 248, 0.2);
+  --glass-bg: rgba(6, 16, 30, 0.65);
+  --glass-border: rgba(125, 211, 252, 0.22);
+  --blob-duration: 30s;
+  --blob-opacity: 0.1;
+}
+
+[data-theme="heisenberg"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: 0.05rem;
+  --bg-primary: #0e1116;
+  --bg-image: url('/images/heisenberg-factory-bg.jpg');
+  --bg-secondary: #161a22;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-1: #ff5500;
+  --accent-2: #ff9900;
+  --accent-3: #ffaa00;
+  --tool-accent: #ff5500;
+  --tool-qr-color: #ff5500;
+  --tool-sound-color: #ff9900;
+  --tool-net-color: #e63946;
+  --tool-crypt-color: #f77f00;
+  --cursor-dot: #ffaa00;
+  --cursor-ring: #ff5500;
+  --cursor-glow: rgba(255, 85, 0, 0.22);
+  --glass-bg: rgba(14, 18, 24, 0.72);
+  --glass-border: rgba(255, 120, 20, 0.22);
+  --blob-duration: 30s;
+  --blob-opacity: 0.1;
+}
+
+[data-theme="ghibli"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: -0.02rem;
+  --bg-primary: #091812;
+  --bg-image: url('/images/ghibli-forest-bg.jpg');
+  --bg-secondary: #11281e;
+  --text-primary: #f2fdf7;
+  --text-secondary: #b7e4c7;
+  --accent-1: #52b788;
+  --accent-2: #ffd166;
+  --accent-3: #74c69d;
+  --tool-accent: #52b788;
+  --tool-qr-color: #52b788;
+  --tool-sound-color: #ffd166;
+  --tool-net-color: #06d6a0;
+  --tool-crypt-color: #74c69d;
+  --cursor-dot: #ffd166;
+  --cursor-ring: #52b788;
+  --cursor-glow: rgba(82, 183, 136, 0.22);
+  --glass-bg: rgba(10, 28, 20, 0.72);
+  --glass-border: rgba(82, 183, 136, 0.22);
+  --blob-duration: 30s;
+  --blob-opacity: 0.1;
+}
+
+[data-theme="tokyo"] {
+  --font-primary: 'Outfit', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --tracking-normal: normal;
+  --tracking-heading: -0.02rem;
+  --bg-primary: #0c0f18;
+  --bg-image: url('/images/tokyo-cyber-rain-bg.jpg');
+  --bg-secondary: #141926;
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1;
+  --accent-1: #ff007f;
+  --accent-2: #00f5d4;
+  --accent-3: #9b5de5;
+  --tool-accent: #ff007f;
+  --tool-qr-color: #ff007f;
+  --tool-sound-color: #00f5d4;
+  --tool-net-color: #9b5de5;
+  --tool-crypt-color: #f72585;
+  --cursor-dot: #00f5d4;
+  --cursor-ring: #ff007f;
+  --cursor-glow: rgba(255, 0, 127, 0.22);
+  --glass-bg: rgba(12, 16, 26, 0.72);
+  --glass-border: rgba(255, 0, 127, 0.22);
+  --blob-duration: 30s;
+  --blob-opacity: 0.1;
 }
 
 * {
@@ -622,4 +778,713 @@ html[data-theme="wood"] body,
 
 .btn-primary:hover::before {
   opacity: 1;
+}
+
+/* ─── Dynamic Tool Icon Theme Accents ─── */
+.card-icon-qr {
+  color: var(--tool-qr-color);
+}
+.card-icon-sound {
+  color: var(--tool-sound-color);
+}
+.card-icon-network-map {
+  color: var(--tool-net-color);
+}
+.card-icon-encrypt {
+  color: var(--tool-crypt-color);
+}
+.card-icon-wrapper svg {
+  color: inherit;
+  stroke: currentColor;
+}
+
+/* ─── Maple Theme Tool Cards & Home Page Elements ─── */
+[data-theme="maple"] .hero h1 .text-gradient {
+  background: linear-gradient(135deg, #ff9e42 0%, #ff5400 50%, #ffc107 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="maple"] .logo .text-gradient {
+  background: linear-gradient(135deg, #ff7a18, #ffc107);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="maple"] .tool-card {
+  background: linear-gradient(135deg, rgba(212, 82, 26, 0.45), rgba(139, 26, 26, 0.2), rgba(200, 134, 15, 0.35));
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 1px rgba(255, 122, 24, 0.3);
+}
+
+[data-theme="maple"] .tool-card::before {
+  background: linear-gradient(45deg, #ff7a18, #d62828, #e08a00, #b85433);
+}
+
+[data-theme="maple"] .tool-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(212, 82, 26, 0.35);
+}
+
+[data-theme="maple"] .card-content {
+  background: rgba(24, 9, 3, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(196, 82, 26, 0.25);
+  border-radius: 1.375rem;
+}
+
+[data-theme="maple"] .card-icon-wrapper {
+  background: linear-gradient(135deg, rgba(196, 82, 26, 0.25), rgba(92, 44, 16, 0.45));
+  border: 1px solid rgba(196, 82, 26, 0.35);
+}
+
+[data-theme="maple"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="maple"] .tool-card p {
+  color: var(--text-secondary);
+}
+
+[data-theme="maple"] .card-action {
+  color: #ff9e42;
+}
+
+[data-theme="maple"] .tool-card:hover .card-action {
+  color: #ffc107;
+}
+
+[data-theme="maple"] .secret-tool-card {
+  border-color: rgba(214, 40, 40, 0.5);
+  box-shadow: 0 0 20px rgba(214, 40, 40, 0.25);
+}
+
+[data-theme="maple"] .secret-tool-card .card-content {
+  background: rgba(35, 10, 8, 0.8);
+  border: 1px solid rgba(214, 40, 40, 0.35);
+}
+
+/* ─── TLOU Theme Tool Card Enhancements ─── */
+[data-theme="tlou"] .card-icon-wrapper {
+  background: rgba(35, 45, 38, 0.5);
+  border: 1px solid rgba(140, 31, 31, 0.35);
+}
+
+[data-theme="tlou"] .card-action {
+  color: var(--text-secondary);
+}
+
+[data-theme="tlou"] .tool-card:hover .card-action {
+  color: var(--accent-3);
+}
+
+/* ─── Snow Theme Tool Cards & UI Elements ─── */
+[data-theme="snow"] .hero h1 .text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #7dd3fc 45%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="snow"] .logo .text-gradient {
+  background: linear-gradient(135deg, #e0f2fe, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="snow"] .tool-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(2, 132, 199, 0.15), rgba(125, 211, 252, 0.25));
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 1px rgba(125, 211, 252, 0.3);
+}
+
+[data-theme="snow"] .tool-card::before {
+  background: linear-gradient(45deg, #38bdf8, #0284c7, #7dd3fc, #a5f3fc);
+}
+
+[data-theme="snow"] .tool-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.35);
+}
+
+[data-theme="snow"] .card-content {
+  background: rgba(5, 14, 26, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 1.375rem;
+}
+
+[data-theme="snow"] .card-icon-wrapper {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(10, 24, 44, 0.5));
+  border: 1px solid rgba(125, 211, 252, 0.35);
+}
+
+[data-theme="snow"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="snow"] .tool-card p {
+  color: var(--text-secondary);
+}
+
+[data-theme="snow"] .card-action {
+  color: #7dd3fc;
+}
+
+[data-theme="snow"] .tool-card:hover .card-action {
+  color: #ffffff;
+}
+
+[data-theme="snow"] .secret-tool-card {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+}
+
+[data-theme="snow"] .secret-tool-card .card-content {
+  background: rgba(8, 22, 40, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+/* ─── Maple Theme Lock Button, Admin Mode Badge & Lock Modal ─── */
+[data-theme="maple"] .lock-btn.locked {
+  background: rgba(32, 12, 6, 0.65);
+  border-color: rgba(214, 40, 40, 0.35);
+  color: #ff9e42;
+}
+
+[data-theme="maple"] .lock-btn.locked:hover {
+  border-color: rgba(255, 122, 24, 0.7);
+  color: #ffc107;
+  box-shadow: 0 0 1rem rgba(255, 122, 24, 0.45);
+}
+
+[data-theme="maple"] .lock-btn.unlocked {
+  background: linear-gradient(135deg, rgba(255, 122, 24, 0.25), rgba(214, 40, 40, 0.18));
+  border-color: rgba(255, 193, 7, 0.65);
+  color: #ffc107;
+  box-shadow: 0 0 1rem rgba(255, 122, 24, 0.45);
+}
+
+[data-theme="maple"] .lock-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(255, 122, 24, 0.35), rgba(214, 40, 40, 0.25));
+  transform: scale(1.08);
+  box-shadow: 0 0 1.5rem rgba(255, 193, 7, 0.65);
+  color: #fff3c4;
+}
+
+[data-theme="maple"] .lock-status-dot {
+  border-color: #1f0a04;
+}
+
+[data-theme="maple"] .lock-status-dot.dot-unlocked {
+  background: #ffc107;
+  box-shadow: 0 0 0.5rem #ffc107;
+}
+
+[data-theme="maple"] .unlocked-badge-hero {
+  background: linear-gradient(135deg, rgba(214, 40, 40, 0.28), rgba(255, 122, 24, 0.22));
+  border-color: rgba(255, 193, 7, 0.55);
+  color: #ffc107;
+  box-shadow: 0 0 20px rgba(255, 122, 24, 0.35), inset 0 1px 1px rgba(255, 193, 7, 0.3);
+  text-shadow: 0 1px 8px rgba(255, 122, 24, 0.6);
+  font-weight: 600;
+}
+
+[data-theme="maple"] .unlocked-badge-hero svg {
+  color: #ffc107;
+  filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.7));
+}
+
+[data-theme="maple"] .lock-modal-card {
+  background: linear-gradient(135deg, rgba(35, 12, 6, 0.95) 0%, rgba(20, 6, 3, 0.98) 100%);
+  border-color: rgba(214, 40, 40, 0.45);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.8), 0 0 2rem rgba(255, 122, 24, 0.25);
+}
+
+[data-theme="maple"] .lock-header-icon-wrap {
+  background: linear-gradient(135deg, rgba(214, 40, 40, 0.3), rgba(255, 122, 24, 0.3));
+  border-color: rgba(255, 122, 24, 0.5);
+  color: #ff9e42;
+}
+
+[data-theme="maple"] .lock-header-icon-wrap.unlocked-glow {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.6);
+  color: #ffc107;
+  box-shadow: 0 0 1.25rem rgba(255, 193, 7, 0.4);
+}
+
+/* ─── Snow Theme Lock Button, Admin Mode Badge & Lock Modal ─── */
+[data-theme="snow"] .lock-btn.locked {
+  background: rgba(6, 16, 32, 0.7);
+  border-color: rgba(125, 211, 252, 0.3);
+  color: #93c5fd;
+}
+
+[data-theme="snow"] .lock-btn.locked:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  color: #ffffff;
+  box-shadow: 0 0 1rem rgba(56, 189, 248, 0.45);
+}
+
+[data-theme="snow"] .lock-btn.unlocked {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(2, 132, 199, 0.18));
+  border-color: rgba(56, 189, 248, 0.7);
+  color: #e0f2fe;
+  box-shadow: 0 0 1rem rgba(56, 189, 248, 0.5);
+}
+
+[data-theme="snow"] .lock-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(125, 211, 252, 0.25));
+  transform: scale(1.08);
+  box-shadow: 0 0 1.5rem rgba(56, 189, 248, 0.75);
+  color: #ffffff;
+}
+
+[data-theme="snow"] .lock-status-dot {
+  border-color: #040d1a;
+}
+
+[data-theme="snow"] .lock-status-dot.dot-unlocked {
+  background: #38bdf8;
+  box-shadow: 0 0 0.5rem #38bdf8;
+}
+
+[data-theme="snow"] .unlocked-badge-hero {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(14, 165, 233, 0.15));
+  border-color: rgba(125, 211, 252, 0.5);
+  color: #e0f2fe;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.65);
+  font-weight: 600;
+}
+
+[data-theme="snow"] .unlocked-badge-hero svg {
+  color: #7dd3fc;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+[data-theme="snow"] .lock-modal-card {
+  background: linear-gradient(135deg, rgba(6, 18, 36, 0.95) 0%, rgba(3, 10, 22, 0.98) 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.8), 0 0 2rem rgba(56, 189, 248, 0.25);
+}
+
+[data-theme="snow"] .lock-header-icon-wrap {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(2, 132, 199, 0.25));
+  border-color: rgba(125, 211, 252, 0.45);
+  color: #7dd3fc;
+}
+
+[data-theme="snow"] .lock-header-icon-wrap.unlocked-glow {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.65);
+  color: #e0f2fe;
+  box-shadow: 0 0 1.25rem rgba(56, 189, 248, 0.4);
+}
+
+/* ─── Heisenberg Factory Theme Tool Cards & UI Elements ─── */
+[data-theme="heisenberg"] .hero h1 .text-gradient {
+  background: linear-gradient(135deg, #ffaa00 0%, #ff5500 50%, #ff8800 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="heisenberg"] .logo .text-gradient {
+  background: linear-gradient(135deg, #ff9900, #ff5500);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="heisenberg"] .tool-card {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.35), rgba(40, 20, 10, 0.4), rgba(255, 153, 0, 0.25));
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 1px rgba(255, 120, 20, 0.35);
+}
+
+[data-theme="heisenberg"] .tool-card::before {
+  background: linear-gradient(45deg, #ff5500, #ff9900, #d62828, #ffaa00);
+}
+
+[data-theme="heisenberg"] .tool-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 85, 0, 0.4);
+}
+
+[data-theme="heisenberg"] .card-content {
+  background: rgba(14, 17, 24, 0.78);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 120, 20, 0.25);
+  border-radius: 1.375rem;
+}
+
+[data-theme="heisenberg"] .card-icon-wrapper {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.25), rgba(30, 18, 12, 0.6));
+  border: 1px solid rgba(255, 120, 20, 0.38);
+}
+
+[data-theme="heisenberg"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="heisenberg"] .tool-card p {
+  color: var(--text-secondary);
+}
+
+[data-theme="heisenberg"] .card-action {
+  color: #ff9900;
+}
+
+[data-theme="heisenberg"] .tool-card:hover .card-action {
+  color: #ffaa00;
+}
+
+[data-theme="heisenberg"] .secret-tool-card {
+  border-color: rgba(255, 85, 0, 0.6);
+  box-shadow: 0 0 20px rgba(255, 85, 0, 0.35);
+}
+
+[data-theme="heisenberg"] .secret-tool-card .card-content {
+  background: rgba(22, 14, 10, 0.85);
+  border: 1px solid rgba(255, 85, 0, 0.4);
+}
+
+[data-theme="heisenberg"] .lock-btn.locked {
+  background: rgba(24, 14, 10, 0.75);
+  border-color: rgba(255, 100, 20, 0.35);
+  color: #ff9900;
+}
+
+[data-theme="heisenberg"] .lock-btn.locked:hover {
+  border-color: rgba(255, 100, 20, 0.75);
+  color: #ffffff;
+  box-shadow: 0 0 1rem rgba(255, 85, 0, 0.5);
+}
+
+[data-theme="heisenberg"] .lock-btn.unlocked {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.28), rgba(255, 153, 0, 0.2));
+  border-color: rgba(255, 170, 0, 0.7);
+  color: #ffaa00;
+  box-shadow: 0 0 1rem rgba(255, 85, 0, 0.5);
+}
+
+[data-theme="heisenberg"] .lock-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.38), rgba(255, 153, 0, 0.3));
+  transform: scale(1.08);
+  box-shadow: 0 0 1.5rem rgba(255, 85, 0, 0.75);
+  color: #ffffff;
+}
+
+[data-theme="heisenberg"] .lock-status-dot {
+  border-color: #120a05;
+}
+
+[data-theme="heisenberg"] .lock-status-dot.dot-unlocked {
+  background: #ffaa00;
+  box-shadow: 0 0 0.5rem #ffaa00;
+}
+
+[data-theme="heisenberg"] .unlocked-badge-hero {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.25), rgba(255, 153, 0, 0.18));
+  border-color: rgba(255, 170, 0, 0.55);
+  color: #ffaa00;
+  box-shadow: 0 0 22px rgba(255, 85, 0, 0.4), inset 0 1px 1px rgba(255, 200, 100, 0.35);
+  text-shadow: 0 0 10px rgba(255, 100, 0, 0.65);
+  font-weight: 600;
+}
+
+[data-theme="heisenberg"] .unlocked-badge-hero svg {
+  color: #ffaa00;
+  filter: drop-shadow(0 0 8px rgba(255, 100, 0, 0.8));
+}
+
+[data-theme="heisenberg"] .lock-modal-card {
+  background: linear-gradient(135deg, rgba(22, 14, 10, 0.96) 0%, rgba(12, 10, 10, 0.98) 100%);
+  border-color: rgba(255, 85, 0, 0.45);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.85), 0 0 2rem rgba(255, 85, 0, 0.3);
+}
+
+[data-theme="heisenberg"] .lock-header-icon-wrap {
+  background: linear-gradient(135deg, rgba(255, 85, 0, 0.28), rgba(255, 153, 0, 0.25));
+  border-color: rgba(255, 120, 20, 0.45);
+  color: #ff9900;
+}
+
+[data-theme="heisenberg"] .lock-header-icon-wrap.unlocked-glow {
+  background: rgba(255, 85, 0, 0.2);
+  border-color: rgba(255, 170, 0, 0.65);
+  color: #ffaa00;
+  box-shadow: 0 0 1.25rem rgba(255, 85, 0, 0.4);
+}
+
+/* ─── Studio Ghibli Theme Tool Cards & UI Elements ─── */
+[data-theme="ghibli"] .hero h1 .text-gradient {
+  background: linear-gradient(135deg, #74c69d 0%, #ffd166 50%, #52b788 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="ghibli"] .logo .text-gradient {
+  background: linear-gradient(135deg, #ffd166, #52b788);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="ghibli"] .tool-card {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.35), rgba(15, 45, 30, 0.4), rgba(255, 209, 102, 0.2));
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 1px rgba(82, 183, 136, 0.3);
+}
+
+[data-theme="ghibli"] .tool-card::before {
+  background: linear-gradient(45deg, #52b788, #ffd166, #06d6a0, #74c69d);
+}
+
+[data-theme="ghibli"] .tool-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(82, 183, 136, 0.35);
+}
+
+[data-theme="ghibli"] .card-content {
+  background: rgba(10, 26, 18, 0.78);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(82, 183, 136, 0.25);
+  border-radius: 1.375rem;
+}
+
+[data-theme="ghibli"] .card-icon-wrapper {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.25), rgba(10, 35, 22, 0.55));
+  border: 1px solid rgba(82, 183, 136, 0.38);
+}
+
+[data-theme="ghibli"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="ghibli"] .tool-card p {
+  color: var(--text-secondary);
+}
+
+[data-theme="ghibli"] .card-action {
+  color: #ffd166;
+}
+
+[data-theme="ghibli"] .tool-card:hover .card-action {
+  color: #ffffff;
+}
+
+[data-theme="ghibli"] .secret-tool-card {
+  border-color: rgba(82, 183, 136, 0.55);
+  box-shadow: 0 0 20px rgba(82, 183, 136, 0.3);
+}
+
+[data-theme="ghibli"] .secret-tool-card .card-content {
+  background: rgba(8, 30, 20, 0.85);
+  border: 1px solid rgba(82, 183, 136, 0.35);
+}
+
+[data-theme="ghibli"] .lock-btn.locked {
+  background: rgba(12, 28, 20, 0.75);
+  border-color: rgba(82, 183, 136, 0.35);
+  color: #74c69d;
+}
+
+[data-theme="ghibli"] .lock-btn.locked:hover {
+  border-color: rgba(82, 183, 136, 0.75);
+  color: #ffd166;
+  box-shadow: 0 0 1rem rgba(82, 183, 136, 0.45);
+}
+
+[data-theme="ghibli"] .lock-btn.unlocked {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.28), rgba(255, 209, 102, 0.18));
+  border-color: rgba(255, 209, 102, 0.65);
+  color: #ffd166;
+  box-shadow: 0 0 1rem rgba(82, 183, 136, 0.45);
+}
+
+[data-theme="ghibli"] .lock-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.38), rgba(255, 209, 102, 0.28));
+  transform: scale(1.08);
+  box-shadow: 0 0 1.5rem rgba(255, 209, 102, 0.65);
+  color: #ffffff;
+}
+
+[data-theme="ghibli"] .lock-status-dot {
+  border-color: #06140d;
+}
+
+[data-theme="ghibli"] .lock-status-dot.dot-unlocked {
+  background: #ffd166;
+  box-shadow: 0 0 0.5rem #ffd166;
+}
+
+[data-theme="ghibli"] .unlocked-badge-hero {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.25), rgba(255, 209, 102, 0.18));
+  border-color: rgba(255, 209, 102, 0.55);
+  color: #ffd166;
+  box-shadow: 0 0 22px rgba(82, 183, 136, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(82, 183, 136, 0.65);
+  font-weight: 600;
+}
+
+[data-theme="ghibli"] .unlocked-badge-hero svg {
+  color: #ffd166;
+  filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.8));
+}
+
+[data-theme="ghibli"] .lock-modal-card {
+  background: linear-gradient(135deg, rgba(10, 28, 20, 0.96) 0%, rgba(6, 18, 12, 0.98) 100%);
+  border-color: rgba(82, 183, 136, 0.45);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.8), 0 0 2rem rgba(82, 183, 136, 0.25);
+}
+
+[data-theme="ghibli"] .lock-header-icon-wrap {
+  background: linear-gradient(135deg, rgba(82, 183, 136, 0.28), rgba(255, 209, 102, 0.25));
+  border-color: rgba(82, 183, 136, 0.45);
+  color: #ffd166;
+}
+
+[data-theme="ghibli"] .lock-header-icon-wrap.unlocked-glow {
+  background: rgba(82, 183, 136, 0.2);
+  border-color: rgba(255, 209, 102, 0.65);
+  color: #ffd166;
+  box-shadow: 0 0 1.25rem rgba(82, 183, 136, 0.4);
+}
+
+/* ─── Tokyo Cyber Rain Theme Tool Cards & UI Elements ─── */
+[data-theme="tokyo"] .hero h1 .text-gradient {
+  background: linear-gradient(135deg, #ff007f 0%, #00f5d4 50%, #9b5de5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="tokyo"] .logo .text-gradient {
+  background: linear-gradient(135deg, #ff007f, #00f5d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme="tokyo"] .tool-card {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.35), rgba(20, 15, 35, 0.4), rgba(0, 245, 212, 0.25));
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 1px rgba(255, 0, 127, 0.35);
+}
+
+[data-theme="tokyo"] .tool-card::before {
+  background: linear-gradient(45deg, #ff007f, #00f5d4, #9b5de5, #ff66a3);
+}
+
+[data-theme="tokyo"] .tool-card:hover {
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 0, 127, 0.4);
+}
+
+[data-theme="tokyo"] .card-content {
+  background: rgba(12, 15, 26, 0.78);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 0, 127, 0.25);
+  border-radius: 1.375rem;
+}
+
+[data-theme="tokyo"] .card-icon-wrapper {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.25), rgba(18, 24, 40, 0.55));
+  border: 1px solid rgba(255, 0, 127, 0.38);
+}
+
+[data-theme="tokyo"] .tool-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="tokyo"] .tool-card p {
+  color: var(--text-secondary);
+}
+
+[data-theme="tokyo"] .card-action {
+  color: #00f5d4;
+}
+
+[data-theme="tokyo"] .tool-card:hover .card-action {
+  color: #ffffff;
+}
+
+[data-theme="tokyo"] .secret-tool-card {
+  border-color: rgba(255, 0, 127, 0.6);
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.35);
+}
+
+[data-theme="tokyo"] .secret-tool-card .card-content {
+  background: rgba(24, 10, 28, 0.85);
+  border: 1px solid rgba(255, 0, 127, 0.4);
+}
+
+[data-theme="tokyo"] .lock-btn.locked {
+  background: rgba(20, 14, 30, 0.75);
+  border-color: rgba(255, 0, 127, 0.35);
+  color: #ff007f;
+}
+
+[data-theme="tokyo"] .lock-btn.locked:hover {
+  border-color: rgba(255, 0, 127, 0.75);
+  color: #00f5d4;
+  box-shadow: 0 0 1rem rgba(255, 0, 127, 0.45);
+}
+
+[data-theme="tokyo"] .lock-btn.unlocked {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.28), rgba(0, 245, 212, 0.18));
+  border-color: rgba(0, 245, 212, 0.65);
+  color: #00f5d4;
+  box-shadow: 0 0 1rem rgba(255, 0, 127, 0.45);
+}
+
+[data-theme="tokyo"] .lock-btn.unlocked:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.38), rgba(0, 245, 212, 0.28));
+  transform: scale(1.08);
+  box-shadow: 0 0 1.5rem rgba(0, 245, 212, 0.65);
+  color: #ffffff;
+}
+
+[data-theme="tokyo"] .lock-status-dot {
+  border-color: #0a0c14;
+}
+
+[data-theme="tokyo"] .lock-status-dot.dot-unlocked {
+  background: #00f5d4;
+  box-shadow: 0 0 0.5rem #00f5d4;
+}
+
+[data-theme="tokyo"] .unlocked-badge-hero {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.25), rgba(0, 245, 212, 0.18));
+  border-color: rgba(0, 245, 212, 0.55);
+  color: #00f5d4;
+  box-shadow: 0 0 22px rgba(255, 0, 127, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.65);
+  font-weight: 600;
+}
+
+[data-theme="tokyo"] .unlocked-badge-hero svg {
+  color: #00f5d4;
+  filter: drop-shadow(0 0 8px rgba(0, 245, 212, 0.8));
+}
+
+[data-theme="tokyo"] .lock-modal-card {
+  background: linear-gradient(135deg, rgba(16, 12, 28, 0.96) 0%, rgba(10, 8, 18, 0.98) 100%);
+  border-color: rgba(255, 0, 127, 0.45);
+  box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.85), 0 0 2rem rgba(255, 0, 127, 0.3);
+}
+
+[data-theme="tokyo"] .lock-header-icon-wrap {
+  background: linear-gradient(135deg, rgba(255, 0, 127, 0.28), rgba(0, 245, 212, 0.25));
+  border-color: rgba(255, 0, 127, 0.45);
+  color: #00f5d4;
+}
+
+[data-theme="tokyo"] .lock-header-icon-wrap.unlocked-glow {
+  background: rgba(255, 0, 127, 0.2);
+  border-color: rgba(0, 245, 212, 0.65);
+  color: #00f5d4;
+  box-shadow: 0 0 1.25rem rgba(0, 245, 212, 0.4);
 }

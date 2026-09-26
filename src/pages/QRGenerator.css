@@ -20,19 +20,34 @@ html[data-theme="tlou"] body.qr-page-active {
     position: absolute;
     top: 2rem;
     left: 2rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
+    padding: 0.625rem 1.125rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.12);
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 20;
 }
 
 .qr-generator-page .back-link:hover {
-    color: var(--accent-3);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-3);
+    box-shadow: 0 0.25rem 1rem rgba(0, 210, 255, 0.25);
+    transform: translateY(-0.0625rem);
+}
+
+.qr-generator-page .back-link:active {
+    transform: translateY(0);
 }
 
 .qr-container {
@@ -154,13 +169,138 @@ html[data-theme="tlou"] body.qr-page-active {
     gap: 0.9375rem;
 }
 
-.checkbox-label {
+/* Custom Checkbox Styling */
+.custom-checkbox-label {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.92rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    transition: color 0.2s ease;
+    width: fit-content;
+    white-space: nowrap;
+    padding: 0.35rem 0.6rem;
+    margin: -0.35rem -0.6rem;
+    border-radius: 0.5rem;
+}
+
+.custom-checkbox-label:hover {
+    color: var(--text-primary, #ffffff);
+}
+
+.custom-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    margin: 0;
+}
+
+.custom-checkbox-box {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.375rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 0.09375rem solid rgba(255, 255, 255, 0.25);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.custom-checkbox-label:hover .custom-checkbox-box {
+    border-color: var(--accent-3, #00d2ff);
+    box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
+}
+
+.custom-checkbox-label.checked .custom-checkbox-box,
+.custom-checkbox-input:checked + .custom-checkbox-box {
+    background: var(--accent-3, #00d2ff);
+    border-color: var(--accent-3, #00d2ff);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.45);
+    transform: scale(1.03);
+}
+
+.custom-checkbox-icon {
+    color: #050b14;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-checkbox-label.checked .custom-checkbox-icon,
+.custom-checkbox-input:checked + .custom-checkbox-box .custom-checkbox-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.custom-checkbox-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* Fallback for standard checkbox-label */
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    color: var(--text-primary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.375rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 0.09375rem solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+    transition: all 0.2s ease;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:hover {
+    border-color: var(--accent-3, #00d2ff);
+    box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background: var(--accent-3, #00d2ff);
+    border-color: var(--accent-3, #00d2ff);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.45);
+}
+
+.checkbox-label input[type="checkbox"]::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    transform: scale(0);
+    transition: 0.15s transform ease-in-out;
+    background-color: #050b14;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.checkbox-label input[type="checkbox"]:checked::before {
+    transform: scale(1);
 }
 
 /* Design Section */
@@ -187,41 +327,114 @@ html[data-theme="tlou"] body.qr-page-active {
     gap: 1.25rem;
 }
 
-.color-picker-group label {
+.color-picker-group label:not(.custom-checkbox-label):not(.checkbox-label) {
     display: block;
     font-size: 0.9rem;
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
 
+.color-picker-group .custom-checkbox-label,
+.color-picker-group .checkbox-label {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
+}
+
 .color-input-wrapper {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: rgba(0,0,0,0.3);
-    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 0.45rem 0.75rem;
     border-radius: 0.75rem;
-    border: 0.0625rem solid rgba(255,255,255,0.1);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.12);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.color-input-wrapper:focus-within {
+    border-color: var(--accent-3, #00d2ff);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
 }
 
 .color-input-wrapper input[type="color"] {
     -webkit-appearance: none;
     appearance: none;
     border: none;
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 0.375rem;
     cursor: pointer;
     background: none;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
     padding: 0;
 }
+
 .color-input-wrapper input[type="color"]::-webkit-color-swatch {
-    border: none;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.25);
     border-radius: 0.375rem;
+}
+
+.color-input-wrapper input[type="color"]::-moz-color-swatch {
+    border: 0.0625rem solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.375rem;
+}
+
+.hex-text-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary, #ffffff);
+    font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: 100%;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0;
+}
+
+.hex-text-input::placeholder {
+    color: var(--text-secondary, rgba(255, 255, 255, 0.4));
+}
+
+.color-input-wrapper.has-error {
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.hex-error-badge {
+    color: #ef4444;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.5rem;
+    background: rgba(239, 68, 68, 0.12);
+    border-radius: 0.375rem;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    flex-shrink: 0;
+    animation: hexBadgeFadeIn 0.2s ease-out;
+}
+
+@keyframes hexBadgeFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .logo-upload-group {
@@ -448,15 +661,24 @@ html[data-theme="wood"] body.qr-page-active {
 }
 
 [data-theme="wood"] .qr-generator-page .back-link {
-    color: #4a2815;
+    background-image: url('/images/wood-block.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
     font-family: var(--font-heading);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     letter-spacing: 0.04em;
-    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.5);
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(255, 235, 205, 0.7);
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
 }
 
 [data-theme="wood"] .qr-generator-page .back-link:hover {
-    color: #4a2815;
+    background-image: url('/images/wood-block.png');
+    border: 1px solid rgba(100, 50, 20, 0.45);
+    color: #241106;
+    box-shadow: 0 2px 6px rgba(40, 20, 8, 0.25);
     transform: none;
 }
 
@@ -580,12 +802,32 @@ html[data-theme="wood"] body.qr-page-active {
 [data-theme="wood"] .color-picker-group label,
 [data-theme="wood"] .shape-group label,
 [data-theme="wood"] .slider-header,
+[data-theme="wood"] .custom-checkbox-label,
+[data-theme="wood"] .custom-checkbox-text,
 [data-theme="wood"] .checkbox-label {
     color: #3b1d0d;
     font-weight: 500;
     text-shadow: 
       0 -1px 1px rgba(0, 0, 0, 0.6),
       0 1px 1px rgba(255, 240, 220, 0.4);
+}
+
+[data-theme="wood"] .custom-checkbox-box,
+[data-theme="wood"] .checkbox-label input[type="checkbox"] {
+    background: rgba(60, 30, 15, 0.35);
+    border-color: rgba(120, 60, 20, 0.5);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="wood"] .custom-checkbox-label.checked .custom-checkbox-box,
+[data-theme="wood"] .checkbox-label input[type="checkbox"]:checked {
+    background: #a0522d;
+    border-color: #8b4513;
+    box-shadow: 0 0 8px rgba(160, 82, 45, 0.5);
+}
+
+[data-theme="wood"] .custom-checkbox-icon {
+    color: #fbf3ea;
 }
 
 [data-theme="wood"] .upload-btn {
@@ -679,4 +921,88 @@ html[data-theme="wood"] body.qr-page-active {
 [data-theme="wood"] .download-btn svg {
     color: #241106;
     stroke: #241106;
+}
+
+/* ─── TLOU Theme Back Link ─── */
+[data-theme="tlou"] .qr-generator-page .back-link {
+    background: rgba(18, 26, 20, 0.65);
+    border: 0.0625rem solid rgba(85, 120, 90, 0.25);
+    color: #d1dfc8;
+}
+
+[data-theme="tlou"] .qr-generator-page .back-link:hover {
+    background: rgba(28, 42, 30, 0.85);
+    border-color: rgba(120, 175, 130, 0.45);
+    color: #eaf8e4;
+    box-shadow: 0 0 15px rgba(120, 175, 130, 0.15);
+}
+
+/* ─── Maple Theme Back Link ─── */
+[data-theme="maple"] .qr-generator-page .back-link {
+    background: rgba(45, 18, 10, 0.55);
+    border: 0.0625rem solid rgba(255, 140, 60, 0.25);
+    color: #ffeedd;
+}
+
+[data-theme="maple"] .qr-generator-page .back-link:hover {
+    background: rgba(65, 25, 15, 0.75);
+    border-color: rgba(255, 160, 80, 0.45);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 120, 50, 0.2);
+}
+
+/* ─── Snow Theme Back Link ─── */
+[data-theme="snow"] .qr-generator-page .back-link {
+    background: rgba(15, 30, 55, 0.65);
+    border: 0.0625rem solid rgba(160, 215, 255, 0.25);
+    color: #e0f2fe;
+}
+
+[data-theme="snow"] .qr-generator-page .back-link:hover {
+    background: rgba(25, 45, 80, 0.85);
+    border-color: rgba(186, 230, 253, 0.5);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(186, 230, 253, 0.25);
+}
+
+/* ─── Heisenberg Factory Theme Back Link ─── */
+[data-theme="heisenberg"] .qr-generator-page .back-link {
+    background: rgba(22, 14, 10, 0.75);
+    border: 0.0625rem solid rgba(255, 120, 20, 0.35);
+    color: #ffaa00;
+}
+
+[data-theme="heisenberg"] .qr-generator-page .back-link:hover {
+    background: rgba(35, 18, 12, 0.9);
+    border-color: rgba(255, 170, 0, 0.65);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 85, 0, 0.3);
+}
+
+/* ─── Studio Ghibli Theme Back Link ─── */
+[data-theme="ghibli"] .qr-generator-page .back-link {
+    background: rgba(10, 28, 20, 0.75);
+    border: 0.0625rem solid rgba(82, 183, 136, 0.35);
+    color: #b7e4c7;
+}
+
+[data-theme="ghibli"] .qr-generator-page .back-link:hover {
+    background: rgba(16, 40, 28, 0.9);
+    border-color: rgba(255, 209, 102, 0.65);
+    color: #ffd166;
+    box-shadow: 0 0 15px rgba(82, 183, 136, 0.3);
+}
+
+/* ─── Tokyo Cyber Rain Theme Back Link ─── */
+[data-theme="tokyo"] .qr-generator-page .back-link {
+    background: rgba(14, 18, 30, 0.75);
+    border: 0.0625rem solid rgba(255, 0, 127, 0.35);
+    color: #00f5d4;
+}
+
+[data-theme="tokyo"] .qr-generator-page .back-link:hover {
+    background: rgba(24, 16, 38, 0.9);
+    border-color: rgba(255, 0, 127, 0.65);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 0, 127, 0.35);
 }

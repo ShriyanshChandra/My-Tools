@@ -1,9 +1,132 @@
 import React, { useState, useRef, useEffect } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Wifi, Link2, Mail, MessageSquare, Type, Image as ImageIcon, Palette, QrCode, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, Download, Wifi, Link2, Mail, MessageSquare, Type, Image as ImageIcon, Palette, QrCode, LayoutGrid, Check } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 import './QRGenerator.css';
+
+const CustomCheckbox = ({ checked, onChange, label, style }) => {
+    return (
+        <label className={`custom-checkbox-label ${checked ? 'checked' : ''}`} style={style}>
+            <input 
+                type="checkbox" 
+                className="custom-checkbox-input"
+                checked={checked} 
+                onChange={onChange} 
+            />
+            <span className="custom-checkbox-box">
+                <Check size={12} strokeWidth={3} className="custom-checkbox-icon" />
+            </span>
+            <span className="custom-checkbox-text">{label}</span>
+        </label>
+    );
+};
+
+const HexColorPicker = ({ value, onChange, label, defaultValue = '#000000' }) => {
+    const [inputValue, setInputValue] = useState(value);
+    const [isFocused, setIsFocused] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    useEffect(() => {
+        if (!isFocused) {
+            setInputValue(value);
+        }
+    }, [value, isFocused]);
+
+    const handleTextChange = (e) => {
+        let val = e.target.value;
+        if (val.startsWith('##')) {
+            val = val.replace(/^#+/, '#');
+        } else if (val.length > 0 && !val.startsWith('#')) {
+            val = '#' + val;
+        }
+        setInputValue(val);
+
+        // Check if user typed invalid non-hex characters
+        const isHexCharsOnly = /^#[0-9A-Fa-f]*$/.test(val);
+        if (!isHexCharsOnly && val.length > 1) {
+            setErrorMsg('! Invalid Hex colour');
+        } else {
+            setErrorMsg('');
+        }
+
+        if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+            setErrorMsg('');
+            onChange(val.toLowerCase());
+        }
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
+        let val = inputValue.trim();
+        if (val.length > 0 && !val.startsWith('#')) {
+            val = '#' + val;
+        }
+
+        if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+            const formatted = val.toLowerCase();
+            setInputValue(formatted);
+            setErrorMsg('');
+            onChange(formatted);
+        } else if (/^#[0-9A-Fa-f]{3}$/.test(val)) {
+            const expanded = ('#' + val[1] + val[1] + val[2] + val[2] + val[3] + val[3]).toLowerCase();
+            setInputValue(expanded);
+            setErrorMsg('');
+            onChange(expanded);
+        } else {
+            // Reset to default on invalid or incomplete hex input and show error badge
+            const fallback = defaultValue.toLowerCase();
+            setInputValue(fallback);
+            setErrorMsg('! Invalid Hex colour');
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 2500);
+            onChange(fallback);
+        }
+    };
+
+    const textInputRef = useRef(null);
+
+    return (
+        <div 
+            className={`color-input-wrapper ${errorMsg ? 'has-error' : ''}`}
+            onClick={(e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    textInputRef.current?.focus();
+                }
+            }}
+        >
+            <input 
+                type="color" 
+                value={value && value.length === 7 && value.startsWith('#') ? value : defaultValue} 
+                onChange={(e) => {
+                    const newColor = e.target.value.toLowerCase();
+                    setInputValue(newColor);
+                    setErrorMsg('');
+                    onChange(newColor);
+                }} 
+                aria-label={label || 'Color picker'}
+            />
+            <input
+                ref={textInputRef}
+                type="text"
+                className="hex-text-input"
+                value={inputValue}
+                onFocus={() => {
+                    setIsFocused(true);
+                    setErrorMsg('');
+                }}
+                onChange={handleTextChange}
+                onBlur={handleBlur}
+                maxLength={7}
+                placeholder={defaultValue}
+                spellCheck={false}
+                aria-label={label || 'Hex color code'}
+            />
+            {errorMsg && <span className="hex-error-badge">{errorMsg}</span>}
+        </div>
+    );
+};
 
 const QRGenerator = () => {
     // State for QR Types and Data
@@ -35,7 +158,7 @@ const QRGenerator = () => {
 
     const [logoUrl, setLogoUrl] = useState('');
     const [logoSize, setLogoSize] = useState(15); // 15%
-    const [showDomainText, setShowDomainText] = useState(true);
+    const [showDomainText, setShowDomainText] = useState(false);
 
     // Styling states
     // Advanced Styling
@@ -285,10 +408,11 @@ const QRGenerator = () => {
                             {qrType === 'url' && (
                                 <div className="grid-inputs-vertical">
                                     <input type="text" placeholder="Enter URL (e.g., https://example.com)" className="qr-input" value={url} onChange={(e) => setUrl(e.target.value)} />
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" checked={showDomainText} onChange={(e) => setShowDomainText(e.target.checked)} />
-                                        Show website name under QR Code
-                                    </label>
+                                    <CustomCheckbox 
+                                        checked={showDomainText} 
+                                        onChange={(e) => setShowDomainText(e.target.checked)} 
+                                        label="Show website name under QR Code" 
+                                    />
                                 </div>
                             )}
                             
@@ -309,10 +433,11 @@ const QRGenerator = () => {
                                             { value: 'nopass', label: 'None' }
                                         ]}
                                     />
-                                    <label className="checkbox-label">
-                                        <input type="checkbox" checked={wifiHidden} onChange={(e) => setWifiHidden(e.target.checked)} />
-                                        Hidden Network
-                                    </label>
+                                    <CustomCheckbox 
+                                        checked={wifiHidden} 
+                                        onChange={(e) => setWifiHidden(e.target.checked)} 
+                                        label="Hidden Network" 
+                                    />
                                 </div>
                             )}
 
@@ -385,22 +510,18 @@ const QRGenerator = () => {
                                 {/* Foreground Colors */}
                                 <div className="color-picker-group">
                                     <label style={{fontWeight: '700', borderBottom: '0.0625rem solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem'}}>Foreground</label>
-                                    <div className="color-input-wrapper">
-                                        <input type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} />
-                                        <span>{fgColor}</span>
-                                    </div>
-                                    <label className="checkbox-label" style={{marginTop: '0.75rem'}}>
-                                        <input type="checkbox" checked={useGradient} onChange={(e) => setUseGradient(e.target.checked)} />
-                                        Use Gradient?
-                                    </label>
+                                    <HexColorPicker value={fgColor} onChange={setFgColor} label="Foreground Color" defaultValue="#000000" />
+                                    <CustomCheckbox 
+                                        checked={useGradient} 
+                                        onChange={(e) => setUseGradient(e.target.checked)} 
+                                        label="Use Gradient?" 
+                                        style={{ marginTop: '0.75rem' }} 
+                                    />
                                     
                                     {useGradient && (
                                         <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
                                              <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
-                                             <div className="color-input-wrapper">
-                                                 <input type="color" value={gradientColor} onChange={(e) => setGradientColor(e.target.value)} />
-                                                 <span>{gradientColor}</span>
-                                             </div>
+                                             <HexColorPicker value={gradientColor} onChange={setGradientColor} label="Foreground Gradient Color" defaultValue="#000000" />
                                              
                                              <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
                                                  <div style={{ flex: 1 }}>
@@ -438,22 +559,18 @@ const QRGenerator = () => {
                                 {/* Background Colors */}
                                 <div className="color-picker-group">
                                     <label style={{fontWeight: '700', borderBottom: '0.0625rem solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem'}}>Background</label>
-                                    <div className="color-input-wrapper">
-                                        <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} />
-                                        <span>{bgColor}</span>
-                                    </div>
-                                    <label className="checkbox-label" style={{marginTop: '0.75rem'}}>
-                                        <input type="checkbox" checked={useBgGradient} onChange={(e) => setUseBgGradient(e.target.checked)} />
-                                        Use Gradient?
-                                    </label>
+                                    <HexColorPicker value={bgColor} onChange={setBgColor} label="Background Color" defaultValue="#ffffff" />
+                                    <CustomCheckbox 
+                                        checked={useBgGradient} 
+                                        onChange={(e) => setUseBgGradient(e.target.checked)} 
+                                        label="Use Gradient?" 
+                                        style={{ marginTop: '0.75rem' }} 
+                                    />
                                     
                                     {useBgGradient && (
                                         <div style={{ padding: '0.9375rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.75rem', marginTop: '0.75rem' }}>
                                              <label style={{marginBottom: '0.375rem', display: 'block', fontSize: '0.85rem'}}>Gradient Color</label>
-                                             <div className="color-input-wrapper">
-                                                 <input type="color" value={bgGradientColor} onChange={(e) => setBgGradientColor(e.target.value)} />
-                                                 <span>{bgGradientColor}</span>
-                                             </div>
+                                             <HexColorPicker value={bgGradientColor} onChange={setBgGradientColor} label="Background Gradient Color" defaultValue="#ffffff" />
                                              
                                              <div style={{ display: 'flex', gap: '0.9375rem', marginTop: '0.9375rem' }}>
                                                  <div style={{ flex: 1 }}>

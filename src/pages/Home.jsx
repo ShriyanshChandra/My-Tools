@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
-  Terminal,
   QrCode,
   ArrowRight,
   Palette,
@@ -11,7 +10,8 @@ import {
   Unlock,
   Shield,
   Sparkles,
-  Radio
+  Radio,
+  Terminal
 } from 'lucide-react';
 import LockModal from '../components/LockModal';
 import '../App.css';
@@ -33,7 +33,7 @@ function Home() {
   });
 
   const toggleTheme = () => {
-    const themeCycle = ['neon', 'tlou', 'wood'];
+    const themeCycle = ['neon', 'tlou', 'wood', 'maple', 'snow', 'heisenberg', 'ghibli', 'tokyo'];
     const nextIndex = (themeCycle.indexOf(theme) + 1) % themeCycle.length;
     const newTheme = themeCycle[nextIndex];
     setTheme(newTheme);
@@ -137,9 +137,9 @@ function Home() {
       id: 'qr',
       title: 'QR Code Generator',
       desc: 'Instantly generate high-quality QR codes for URLs with custom domain labels.',
-      icon: <QrCode size={28} color="var(--tool-accent)" />,
+      icon: <QrCode size={28} />,
       delay: '0.1s',
-      color: 'var(--tool-accent)',
+      color: 'var(--tool-qr-color)',
       path: '/qr',
       hidden: false
     },
@@ -147,9 +147,9 @@ function Home() {
       id: 'sound',
       title: 'Background Sound',
       desc: 'Mix ambient background sounds (Rain, Ocean, Noise) with custom frequency tones & binaural beats for focus, study & sleep.',
-      icon: <Music size={28} color="#ff2a85" />,
+      icon: <Music size={28} />,
       delay: '0.2s',
-      color: '#ff2a85',
+      color: 'var(--tool-sound-color)',
       path: '/sound',
       hidden: true
     },
@@ -157,9 +157,9 @@ function Home() {
       id: 'network-map',
       title: 'Network Map',
       desc: 'Interactive 2D room WiFi & bandwidth heatmap. Map coverage, measure live Mbps/ping, spot dead zones, and optimize router placement.',
-      icon: <Radio size={28} color="#00fa9a" />,
+      icon: <Radio size={28} />,
       delay: '0.25s',
-      color: '#00fa9a',
+      color: 'var(--tool-net-color)',
       path: '/network-map',
       hidden: true
     },
@@ -167,9 +167,9 @@ function Home() {
       id: 'encrypt',
       title: 'Secret Crypt Suite',
       desc: 'Military-grade AES-256 text encryption, Base64 encoder, Hex converter, and cryptographic hash generator.',
-      icon: <Shield size={28} color="#00d2ff" />,
+      icon: <Shield size={28} />,
       delay: '0.3s',
-      color: '#00d2ff',
+      color: 'var(--tool-crypt-color)',
       path: '/encrypt',
       hidden: false
     }
@@ -294,10 +294,10 @@ function Home() {
                   )}
 
                   <div
-                    className="card-icon-wrapper"
+                    className={`card-icon-wrapper card-icon-${tool.id}`}
                     style={{
-                      boxShadow: (theme !== 'wood' && hoveredIndex === index) ? `0 0 1.25rem ${tool.color}40` : undefined,
-                      borderColor: (theme !== 'wood' && hoveredIndex === index) ? `${tool.color}50` : undefined
+                      boxShadow: (theme !== 'wood' && hoveredIndex === index) ? `0 0 1.25rem ${tool.color}` : undefined,
+                      borderColor: (theme !== 'wood' && hoveredIndex === index) ? `${tool.color}` : undefined
                     }}
                   >
                     {tool.icon}

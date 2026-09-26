@@ -1,0 +1,142 @@
+/* Custom Cursor Styles */
+.custom-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-cursor-container.visible {
+  opacity: 1;
+}
+
+/* Inner precise dot */
+.cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background-color: var(--cursor-dot, var(--accent-3, #00d2ff));
+  box-shadow: 0 0 8px var(--cursor-dot, var(--accent-3, #00d2ff));
+  pointer-events: none;
+  transition: width 0.2s ease, height 0.2s ease, background-color 0.3s ease, opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* Outer smooth trailing ring */
+.cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--cursor-ring, var(--accent-1, #ff2a85));
+  background-color: var(--cursor-glow, rgba(0, 210, 255, 0.06));
+  box-shadow: 0 0 12px var(--cursor-glow, rgba(0, 210, 255, 0.15));
+  pointer-events: none;
+  transition: border-color 0.3s ease,
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+  will-change: transform, width, height, margin;
+}
+
+/* Hovering over general interactive elements */
+.custom-cursor-container.hovered .cursor-ring {
+  border-color: var(--cursor-dot, var(--accent-3, #00d2ff));
+  background-color: var(--cursor-glow, rgba(0, 210, 255, 0.14));
+  box-shadow: 0 0 16px var(--cursor-dot, var(--accent-3, #00d2ff));
+}
+
+.custom-cursor-container.hovered .cursor-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  margin-left: -3.5px;
+}
+
+/* Text Input Mode: Outer ring becomes the text-box border and dot stays visible to place text cursor */
+.custom-cursor-container.text-mode .cursor-ring {
+  border: 1.5px solid var(--cursor-dot, var(--accent-3, #00d2ff));
+  background-color: var(--cursor-glow, rgba(0, 210, 255, 0.05));
+  box-shadow: 0 0 16px var(--cursor-dot, var(--accent-3, #00d2ff));
+  opacity: 0.9;
+}
+
+.custom-cursor-container.text-mode .cursor-dot {
+  opacity: 1;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+  background-color: var(--cursor-dot, var(--accent-3, #00d2ff));
+  box-shadow: 0 0 8px var(--cursor-dot, var(--accent-3, #00d2ff));
+}
+
+/* Magnetic Lock State (Cursor pulled toward element center) */
+.custom-cursor-container.magnetic .cursor-ring {
+  border-width: 2px;
+  border-color: var(--cursor-dot, var(--accent-3, #00d2ff));
+  background-color: var(--cursor-glow, rgba(0, 210, 255, 0.22));
+  box-shadow: 0 0 22px var(--cursor-dot, var(--accent-3, #00d2ff));
+}
+
+.custom-cursor-container.magnetic .cursor-dot {
+  opacity: 0.35;
+  transform: scale(0.7);
+}
+
+/* Clicking state */
+.custom-cursor-container.clicking .cursor-ring {
+  background-color: var(--cursor-glow, rgba(255, 42, 133, 0.35));
+  transform: scale(0.9);
+}
+
+.custom-cursor-container.clicking .cursor-dot {
+  transform: scale(0.5);
+}
+
+/* Hide custom cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor-container {
+    display: none;
+  }
+}
+
+/* Hide default operating system cursor across all elements when custom cursor is active */
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active body,
+  html.custom-cursor-active *,
+  html.custom-cursor-active *::before,
+  html.custom-cursor-active *::after,
+  html.custom-cursor-active a,
+  html.custom-cursor-active button,
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea,
+  html.custom-cursor-active select,
+  html.custom-cursor-active label,
+  html.custom-cursor-active [role="button"],
+  html.custom-cursor-active .tool-card,
+  html.custom-cursor-active .btn,
+  html.custom-cursor-active .icon-btn,
+  html.custom-cursor-active .tab-btn,
+  html.custom-cursor-active .lock-btn,
+  html.custom-cursor-active .type-btn,
+  html.custom-cursor-active .upload-btn,
+  html.custom-cursor-active .download-btn,
+  html.custom-cursor-active .remove-btn,
+  html.custom-cursor-active .custom-checkbox-label,
+  html.custom-cursor-active .custom-checkbox-box,
+  html.custom-cursor-active .checkbox-label,
+  html.custom-cursor-active .clickable {
+    cursor: none;
+  }
+}
