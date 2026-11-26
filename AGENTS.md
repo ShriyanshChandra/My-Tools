@@ -8,3 +8,7 @@
 
 ## CSS Rule
 - Never use !important every in code. This will make the code look unprofessional and messy. Use only when it is really necessary.
+
+## Responsiveness Rule
+- Whenever implementing something new (pages, components, or UI layouts), always ensure complete mobile and tablet responsiveness across standard viewport breakpoints.
+

@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "AuraWave - Audio Visualizer Bar",
+  "version": "1.1.0",
+  "description": "Minimal top canvas audio visualizer wave that reacts to webpage music, video, and microphone input.",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AuraWave Settings"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["injected-audio-hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

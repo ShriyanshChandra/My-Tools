@@ -1,10 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lock, Unlock, Eye, EyeOff, X, ShieldAlert, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
 
+const isLocalHostname = () => (
+  typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '[::1]'
+  )
+);
+
 const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onResetVisibility }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isWakingServer, setIsWakingServer] = useState(false);
   const [error, setError] = useState('');
   const [isShaking, setIsShaking] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
@@ -15,14 +24,22 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
     if (isOpen) {
       setPassword('');
       setError('');
+      setIsWakingServer(false);
       setJustUnlocked(false);
+
+      // Warm up remote Render backend while user types password in production
+      const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+      if (remoteBackend && !isUnlocked && !isLocalHostname()) {
+        fetch(`${remoteBackend}/api/health`, { method: 'GET' }).catch(() => {});
+      }
+
       setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus();
         }
       }, 100);
     }
-  }, [isOpen]);
+  }, [isOpen, isUnlocked]);
 
   // Handle ESC key to close
   useEffect(() => {
@@ -47,13 +64,11 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
     }
 
     setIsLoading(true);
+    setIsWakingServer(false);
     setError('');
+    const wakingTimer = setTimeout(() => setIsWakingServer(true), 3500);
 
-    const isLocal = typeof window !== 'undefined' && (
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1' ||
-      window.location.hostname === '[::1]'
-    );
+    const isLocal = isLocalHostname();
 
     const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
     const clientMasterPass = (import.meta.env.VITE_TOOLS_PASSWORD || '').trim();
@@ -76,7 +91,9 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
     for (const endpoint of endpointsToTry) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        // Remote backends (e.g. Render free tier) can take ~30-45s to cold-start
+        const timeoutMs = endpoint.startsWith('http') ? 45000 : 8000;
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
         const response = await fetch(endpoint, {
           method: 'POST',
@@ -86,14 +103,22 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
         });
         clearTimeout(timeoutId);
 
-        const data = await response.json().catch(() => ({}));
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+          ? await response.json().catch(() => null)
+          : null;
+
+        if (!data || typeof data !== 'object') {
+          continue;
+        }
+
         reachedAnyServer = true;
 
         if (response.ok && data.success) {
           verified = true;
           verifiedToken = data.token || 'session-token';
           break;
-        } else if (response.status === 401 || data.message) {
+        } else if (response.status === 401 || response.status === 429 || data.message) {
           serverReturnedError = data.message || 'Incorrect password. Access denied.';
         }
       } catch {
@@ -107,6 +132,9 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
       verifiedToken = 'client-verified-session';
     }
 
+    clearTimeout(wakingTimer);
+    setIsWakingServer(false);
+
     if (verified) {
       setJustUnlocked(true);
       setTimeout(() => {
@@ -116,11 +144,11 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
     } else {
       setError(
         serverReturnedError ||
-        (reachedAnyServer
+        (reachedAnyServer || clientMasterPass
           ? 'Incorrect password. Access denied.'
-          : (clientMasterPass
-              ? 'Incorrect password. Access denied.'
-              : 'Cannot reach authentication server. If Render backend is sleeping, it may take ~30s to wake up.'))
+          : (!remoteBackend && !isLocal
+              ? 'Authentication server is not configured (VITE_BACKEND_URL is missing in the deployed build).'
+              : 'Cannot reach authentication server. If Render backend is sleeping, wait ~30-50s and try again (or verify CORS_ORIGIN on Render).'))
       );
       triggerShake();
     }
@@ -268,7 +296,7 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
                 {isLoading ? (
                   <>
                     <Loader2 size={18} className="spinner" />
-                    <span>Verifying...</span>
+                    <span>{isWakingServer ? 'Waking server...' : 'Verifying...'}</span>
                   </>
                 ) : justUnlocked ? (
                   <>

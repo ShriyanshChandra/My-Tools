@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronDown, Check } from 'lucide-react';
 import './CustomSelect.css';
 
@@ -12,7 +13,9 @@ const CustomSelect = ({
   style = {}
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [menuStyle, setMenuStyle] = useState({});
+  const triggerRef = useRef(null);
+  const menuRef = useRef(null);
 
   // Normalize options to { value, label } format
   const normalizedOptions = options.map((opt) => 
@@ -23,17 +26,59 @@ const CustomSelect = ({
 
   const selectedOption = normalizedOptions.find((opt) => String(opt.value) === String(value));
 
-  // Close dropdown when clicking outside
+  // Calculate dropdown position relative to viewport for portal rendering
+  const updateMenuPosition = useCallback(() => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const spaceBelow = viewportHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const menuHeight = Math.min(288, normalizedOptions.length * 44 + 12); // approx
+
+    // Render above if not enough space below and more space above
+    const openUpward = spaceBelow < menuHeight && spaceAbove > spaceBelow;
+
+    setMenuStyle({
+      position: 'fixed',
+      left: rect.left,
+      width: rect.width,
+      zIndex: 99999,
+      ...(openUpward
+        ? { bottom: viewportHeight - rect.top + 6 }
+        : { top: rect.bottom + 6 })
+    });
+  }, [normalizedOptions.length]);
+
+  // Open/close and position recalculation
+  const openMenu = useCallback(() => {
+    updateMenuPosition();
+    setIsOpen(true);
+  }, [updateMenuPosition]);
+
+  // Reposition on scroll/resize while open
   useEffect(() => {
+    if (!isOpen) return;
+    const handleScroll = () => updateMenuPosition();
+    const handleResize = () => updateMenuPosition();
+    window.addEventListener('scroll', handleScroll, true);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen, updateMenuPosition]);
+
+  // Close when clicking outside both trigger and menu
+  useEffect(() => {
+    if (!isOpen) return;
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      const clickedTrigger = triggerRef.current && triggerRef.current.contains(event.target);
+      const clickedMenu = menuRef.current && menuRef.current.contains(event.target);
+      if (!clickedTrigger && !clickedMenu) {
         setIsOpen(false);
       }
     };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -44,13 +89,14 @@ const CustomSelect = ({
     if (disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      setIsOpen((prev) => !prev);
+      if (isOpen) setIsOpen(false);
+      else openMenu();
     } else if (e.key === 'Escape') {
       setIsOpen(false);
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (!isOpen) {
-        setIsOpen(true);
+        openMenu();
       } else {
         const currentIndex = normalizedOptions.findIndex((opt) => String(opt.value) === String(value));
         const nextIndex = (currentIndex + 1) % normalizedOptions.length;
@@ -59,7 +105,7 @@ const CustomSelect = ({
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (!isOpen) {
-        setIsOpen(true);
+        openMenu();
       } else {
         const currentIndex = normalizedOptions.findIndex((opt) => String(opt.value) === String(value));
         const prevIndex = (currentIndex - 1 + normalizedOptions.length) % normalizedOptions.length;
@@ -76,13 +122,17 @@ const CustomSelect = ({
   return (
     <div 
       className={`custom-select-container ${className} ${isOpen ? 'is-open' : ''} ${disabled ? 'is-disabled' : ''}`}
-      ref={dropdownRef}
+      ref={triggerRef}
       style={style}
     >
       <button
         type="button"
         className="custom-select-trigger"
-        onClick={() => !disabled && setIsOpen((prev) => !prev)}
+        onClick={() => {
+          if (disabled) return;
+          if (isOpen) setIsOpen(false);
+          else openMenu();
+        }}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -97,8 +147,13 @@ const CustomSelect = ({
         />
       </button>
 
-      {isOpen && (
-        <ul className="custom-select-menu" role="listbox">
+      {isOpen && createPortal(
+        <ul
+          ref={menuRef}
+          className="custom-select-menu"
+          role="listbox"
+          style={menuStyle}
+        >
           {normalizedOptions.map((option) => {
             const isSelected = String(option.value) === String(value);
             return (
@@ -107,14 +162,19 @@ const CustomSelect = ({
                 role="option"
                 aria-selected={isSelected}
                 className={`custom-select-option ${isSelected ? 'selected' : ''}`}
-                onClick={() => handleSelect(option.value)}
+                onMouseDown={(e) => {
+                  // Use mousedown so it fires before the blur/click-outside handler
+                  e.preventDefault();
+                  handleSelect(option.value);
+                }}
               >
                 <span>{option.label}</span>
                 {isSelected && <Check size={14} className="custom-select-check" />}
               </li>
             );
           })}
-        </ul>
+        </ul>,
+        document.body
       )}
     </div>
   );

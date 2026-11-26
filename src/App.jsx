@@ -12,6 +12,9 @@ import QRGenerator from './pages/QRGenerator';
 import SoundGenerator from './pages/SoundGenerator';
 import TextEncryptor from './pages/TextEncryptor';
 import NetworkMap from './pages/NetworkMap';
+import TreeNotes from './pages/TreeNotes';
+import ANC from './pages/ANC';
+import OSINTInvestigator from './pages/OSINTInvestigator';
 
 function App() {
   return (
@@ -25,10 +28,14 @@ function App() {
       <TokyoBackground />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/tools" element={<TreeNotes />} />
+        <Route path="/tree-notes" element={<TreeNotes />} />
         <Route path="/qr" element={<QRGenerator />} />
         <Route path="/sound" element={<SoundGenerator />} />
         <Route path="/encrypt" element={<TextEncryptor />} />
         <Route path="/network-map" element={<NetworkMap />} />
+        <Route path="/anc" element={<ANC />} />
+        <Route path="/osint" element={<OSINTInvestigator />} />
       </Routes>
     </BrowserRouter>
   );

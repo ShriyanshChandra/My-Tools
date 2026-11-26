@@ -11,7 +11,10 @@ import {
   Shield,
   Sparkles,
   Radio,
-  Terminal
+  Terminal,
+  GitBranch,
+  Headphones,
+  Fingerprint
 } from 'lucide-react';
 import LockModal from '../components/LockModal';
 import '../App.css';
@@ -123,10 +126,14 @@ function Home() {
   const handleResetVisibility = () => {
     localStorage.removeItem('tools-hidden-overrides');
     const resetMap = {
+      'tree-notes': false,
+      tools: false,
       qr: false,
       sound: true,
       'network-map': true,
-      encrypt: false
+      encrypt: false,
+      anc: false,
+      osint: false
     };
     setHiddenOverrides(resetMap);
     syncVisibilityToCloud(resetMap);
@@ -134,13 +141,43 @@ function Home() {
 
   const toolsPlaceholder = [
     {
+      id: 'osint',
+      title: 'OSINT Investigator',
+      desc: 'Automated Open-Source Intelligence reconnaissance. Multi-pivot persona search matrix, Google dork generator, username footprint scanner & Gemini AI dossier synthesis.',
+      icon: <Fingerprint size={28} />,
+      delay: '0.05s',
+      color: 'var(--tool-osint-color)',
+      path: '/osint',
+      hidden: false
+    },
+    {
+      id: 'tree-notes',
+      title: 'Tree Notes',
+      desc: 'Hierarchical branching notes & interactive visual mind map. Build tree nodes, pan/zoom canvas, and import/export markdown or JSON.',
+      icon: <GitBranch size={28} />,
+      delay: '0.1s',
+      color: 'var(--tool-tree-color)',
+      path: '/tree-notes',
+      hidden: false
+    },
+    {
       id: 'qr',
       title: 'QR Code Generator',
       desc: 'Instantly generate high-quality QR codes for URLs with custom domain labels.',
       icon: <QrCode size={28} />,
-      delay: '0.1s',
+      delay: '0.15s',
       color: 'var(--tool-qr-color)',
       path: '/qr',
+      hidden: false
+    },
+    {
+      id: 'anc',
+      title: 'ANC (exp)',
+      desc: 'Active Noise Cancellation laboratory. Live mic soundwave inversion, microsecond acoustic delay tuning, multi-band notch filters & real-time oscilloscope.',
+      icon: <Headphones size={28} />,
+      delay: '0.2s',
+      color: 'var(--tool-anc-color)',
+      path: '/anc',
       hidden: false
     },
     {
@@ -148,7 +185,7 @@ function Home() {
       title: 'Background Sound',
       desc: 'Mix ambient background sounds (Rain, Ocean, Noise) with custom frequency tones & binaural beats for focus, study & sleep.',
       icon: <Music size={28} />,
-      delay: '0.2s',
+      delay: '0.25s',
       color: 'var(--tool-sound-color)',
       path: '/sound',
       hidden: true
@@ -158,7 +195,7 @@ function Home() {
       title: 'Network Map',
       desc: 'Interactive 2D room WiFi & bandwidth heatmap. Map coverage, measure live Mbps/ping, spot dead zones, and optimize router placement.',
       icon: <Radio size={28} />,
-      delay: '0.25s',
+      delay: '0.3s',
       color: 'var(--tool-net-color)',
       path: '/network-map',
       hidden: true
@@ -168,7 +205,7 @@ function Home() {
       title: 'Secret Crypt Suite',
       desc: 'Military-grade AES-256 text encryption, Base64 encoder, Hex converter, and cryptographic hash generator.',
       icon: <Shield size={28} />,
-      delay: '0.3s',
+      delay: '0.35s',
       color: 'var(--tool-crypt-color)',
       path: '/encrypt',
       hidden: false

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraWave Settings</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 10v3"/>
+            <path d="M6 6v11"/>
+            <path d="M10 3v18"/>
+            <path d="M14 8v7"/>
+            <path d="M18 5v13"/>
+            <path d="M22 10v3"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>AuraWave</h1>
+          <span>Top Audio Visualizer</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="popup-content">
+      <!-- Audio Source & Microphone Toggle -->
+      <div class="section-card">
+        <label class="section-title">Audio Source</label>
+        <div class="source-status-box">
+          <span class="status-dot active"></span>
+          <span class="status-label">Webpage Audio: <strong>Auto-Connected</strong></span>
+        </div>
+        <button class="mic-toggle-btn" id="btnToggleMic">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" x2="12" y1="19" y2="22"/>
+          </svg>
+          <span id="micBtnText">Enable Room / Mic Audio</span>
+        </button>
+      </div>
+
+      <!-- Visualizer Styles -->
+      <div class="section-card">
+        <label class="section-title">Visualizer Style</label>
+        <div class="preset-grid">
+          <button class="preset-btn active" data-mode="pulse">Neon Waves</button>
+          <button class="preset-btn" data-mode="spectrum">EQ Spectrum</button>
+          <button class="preset-btn" data-mode="aurora">Cyber Aurora</button>
+          <button class="preset-btn" data-mode="particles">Starlight Drift</button>
+          <button class="preset-btn" data-mode="reactive">Oscilloscope</button>
+        </div>
+      </div>
+
+      <!-- Themes -->
+      <div class="section-card">
+        <label class="section-title">Color Palette</label>
+        <div class="theme-picker">
+          <button class="theme-option cyan active" data-theme="cyan">Cyan</button>
+          <button class="theme-option purple" data-theme="purple">Purple</button>
+          <button class="theme-option emerald" data-theme="emerald">Emerald</button>
+          <button class="theme-option amber" data-theme="amber">Amber</button>
+          <button class="theme-option rose" data-theme="rose">Rose</button>
+        </div>
+      </div>
+
+      <!-- Height & Sensitivity Sliders -->
+      <div class="section-card">
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Wave Height</span>
+            <span class="slider-val" id="heightVal">48px</span>
+          </div>
+          <input type="range" class="range-slider" id="heightSlider" min="20" max="100" value="48" step="4" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Gain Sensitivity</span>
+            <span class="slider-val" id="sensVal">3.2x</span>
+          </div>
+          <input type="range" class="range-slider" id="sensSlider" min="1.0" max="6.0" value="3.2" step="0.2" />
+        </div>
+      </div>
+
+      <!-- Visibility Toggle -->
+      <div class="section-card">
+        <button class="toggle-hud-btn" id="btnToggleVisibility">Toggle Visualizer On / Off</button>
+      </div>
+    </div>
+
+    <footer class="popup-footer">
+      <span>Manifest V3 Active</span>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

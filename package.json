@@ -8,6 +8,7 @@
     "dev": "vite",
     "server": "node server/index.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
+    "anc:engine": "bash server/run_anc_engine.sh",
     "init:firestore": "node server/initFirestore.js",
     "build": "vite build",
     "lint": "oxlint",

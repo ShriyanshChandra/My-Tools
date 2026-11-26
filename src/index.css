@@ -40,6 +40,10 @@
   --tool-sound-color: #ff2a85;
   --tool-net-color: #00fa9a;
   --tool-crypt-color: #8a2be2;
+  --tool-tree-color: #00d2ff;
+  --tool-tools-color: #00d2ff;
+  --tool-anc-color: #00f5d4;
+  --tool-osint-color: #00d2ff;
   --cursor-dot: #00d2ff;
   --cursor-ring: #ff2a85;
   --cursor-glow: rgba(0, 210, 255, 0.15);
@@ -70,6 +74,10 @@
   --tool-sound-color: #d48b47;
   --tool-net-color: #6b8f71;
   --tool-crypt-color: #c9a96e;
+  --tool-tree-color: #8a9950;
+  --tool-tools-color: #8a9950;
+  --tool-anc-color: #8a9950;
+  --tool-osint-color: #8a9950;
   --cursor-dot: #c44536;
   --cursor-ring: #8a9950;
   --cursor-glow: rgba(140, 31, 31, 0.2);
@@ -100,6 +108,10 @@
   --tool-sound-color: #8b4513;
   --tool-net-color: #4a3520;
   --tool-crypt-color: #6d3817;
+  --tool-tree-color: #8b4513;
+  --tool-tools-color: #8b4513;
+  --tool-anc-color: #8b4513;
+  --tool-osint-color: #8b4513;
   --cursor-dot: #4a2810;
   --cursor-ring: #8b4513;
   --cursor-glow: rgba(139, 69, 19, 0.15);
@@ -127,6 +139,10 @@
   --tool-sound-color: #e08a00;
   --tool-net-color: #d62828;
   --tool-crypt-color: #e07a5f;
+  --tool-tree-color: #c4521a;
+  --tool-tools-color: #c4521a;
+  --tool-anc-color: #ff7a18;
+  --tool-osint-color: #c8860f;
   --cursor-dot: #ffc107;
   --cursor-ring: #ff5400;
   --cursor-glow: rgba(255, 122, 24, 0.18);
@@ -154,6 +170,10 @@
   --tool-sound-color: #7dd3fc;
   --tool-net-color: #67e8f9;
   --tool-crypt-color: #a5f3fc;
+  --tool-tree-color: #38bdf8;
+  --tool-tools-color: #38bdf8;
+  --tool-anc-color: #38bdf8;
+  --tool-osint-color: #38bdf8;
   --cursor-dot: #ffffff;
   --cursor-ring: #38bdf8;
   --cursor-glow: rgba(56, 189, 248, 0.2);
@@ -181,6 +201,10 @@
   --tool-sound-color: #ff9900;
   --tool-net-color: #e63946;
   --tool-crypt-color: #f77f00;
+  --tool-tree-color: #ffaa00;
+  --tool-tools-color: #ffaa00;
+  --tool-anc-color: #ffaa00;
+  --tool-osint-color: #ff9900;
   --cursor-dot: #ffaa00;
   --cursor-ring: #ff5500;
   --cursor-glow: rgba(255, 85, 0, 0.22);
@@ -208,6 +232,10 @@
   --tool-sound-color: #ffd166;
   --tool-net-color: #06d6a0;
   --tool-crypt-color: #74c69d;
+  --tool-tree-color: #52b788;
+  --tool-tools-color: #52b788;
+  --tool-anc-color: #52b788;
+  --tool-osint-color: #52b788;
   --cursor-dot: #ffd166;
   --cursor-ring: #52b788;
   --cursor-glow: rgba(82, 183, 136, 0.22);
@@ -235,6 +263,10 @@
   --tool-sound-color: #00f5d4;
   --tool-net-color: #9b5de5;
   --tool-crypt-color: #f72585;
+  --tool-tree-color: #00f5d4;
+  --tool-tools-color: #00f5d4;
+  --tool-anc-color: #00f5d4;
+  --tool-osint-color: #00f5d4;
   --cursor-dot: #00f5d4;
   --cursor-ring: #ff007f;
   --cursor-glow: rgba(255, 0, 127, 0.22);
@@ -780,7 +812,10 @@ html[data-theme="wood"] body,
   opacity: 1;
 }
 
-/* ─── Dynamic Tool Icon Theme Accents ─── */
+.card-icon-tree-notes,
+.card-icon-tools {
+  color: var(--tool-tree-color);
+}
 .card-icon-qr {
   color: var(--tool-qr-color);
 }
@@ -792,6 +827,9 @@ html[data-theme="wood"] body,
 }
 .card-icon-encrypt {
   color: var(--tool-crypt-color);
+}
+.card-icon-anc {
+  color: var(--tool-anc-color);
 }
 .card-icon-wrapper svg {
   color: inherit;

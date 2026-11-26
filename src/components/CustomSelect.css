@@ -1,9 +1,10 @@
-/* CustomSelect.css */
 .custom-select-container {
   position: relative;
   width: 100%;
   user-select: none;
 }
+
+/* Dropdown is portal-rendered under document.body; no z-index needed on the container */
 
 .custom-select-trigger {
   width: 100%;
@@ -49,23 +50,19 @@
   color: var(--accent-3);
 }
 
-/* Dropdown Menu */
+/* Dropdown Menu — rendered as a portal under document.body.
+   position, top/bottom, left, width, z-index are applied inline. */
 .custom-select-menu {
-  position: absolute;
-  top: calc(100% + 0.375rem);
-  left: 0;
-  right: 0;
-  z-index: 100;
   margin: 0;
   padding: 0.375rem;
   list-style: none;
-  background: rgba(15, 20, 30, 0.95);
-  backdrop-filter: blur(1.25rem);
-  -webkit-backdrop-filter: blur(1.25rem);
-  border: 0.0625rem solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 20, 30, 0.98);
+  backdrop-filter: blur(1.5rem);
+  -webkit-backdrop-filter: blur(1.5rem);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.15);
   border-radius: 0.875rem;
-  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.6);
-  max-height: 15rem;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.85);
+  max-height: 18rem;
   overflow-y: auto;
   animation: dropdownOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
