@@ -9,6 +9,30 @@ const isLocalHostname = () => (
   )
 );
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const verifyAgainstEndpoint = async (endpoint, password, timeoutMs) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+      signal: controller.signal
+    });
+    const contentType = response.headers.get('content-type') || '';
+    const data = contentType.includes('application/json')
+      ? await response.json().catch(() => null)
+      : null;
+
+    return { response, data };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
 const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onResetVisibility }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -27,10 +51,11 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
       setIsWakingServer(false);
       setJustUnlocked(false);
 
-      // Warm up remote Render backend while user types password in production
+      // Warm up backend while user types password in production
       const remoteBackend = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
-      if (remoteBackend && !isUnlocked && !isLocalHostname()) {
-        fetch(`${remoteBackend}/api/health`, { method: 'GET' }).catch(() => {});
+      if (!isUnlocked && !isLocalHostname()) {
+        const healthUrl = remoteBackend ? `${remoteBackend}/api/health` : '/api/health';
+        fetch(healthUrl, { method: 'GET' }).catch(() => {});
       }
 
       setTimeout(() => {
@@ -87,42 +112,53 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
     let verifiedToken = null;
     let serverReturnedError = '';
     let reachedAnyServer = false;
+    let missingRemoteRoute = false;
 
     for (const endpoint of endpointsToTry) {
-      try {
-        const controller = new AbortController();
-        // Remote backends (e.g. Render free tier) can take ~30-45s to cold-start
-        const timeoutMs = endpoint.startsWith('http') ? 45000 : 8000;
-        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      const isRemoteOrProd = !isLocal || endpoint.startsWith('http');
+      const timeoutMs = isRemoteOrProd ? 45000 : 8000;
+      const maxAttempts = !isLocal && endpoint === '/api/verify-password' ? 3 : 1;
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: inputPassword }),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+          const { response, data } = await verifyAgainstEndpoint(endpoint, inputPassword, timeoutMs);
 
-        const contentType = response.headers.get('content-type') || '';
-        const data = contentType.includes('application/json')
-          ? await response.json().catch(() => null)
-          : null;
+          if (response.status >= 502) {
+            if (attempt < maxAttempts - 1) {
+              setIsWakingServer(true);
+              await sleep(2000);
+              continue;
+            }
+            break;
+          }
 
-        if (!data || typeof data !== 'object') {
-          continue;
-        }
+          if (!data || typeof data !== 'object' || typeof data.success !== 'boolean') {
+            if (response.status === 404 || response.status === 405) {
+              missingRemoteRoute = true;
+            }
+            break;
+          }
 
-        reachedAnyServer = true;
+          reachedAnyServer = true;
 
-        if (response.ok && data.success) {
-          verified = true;
-          verifiedToken = data.token || 'session-token';
+          if (response.ok && data.success) {
+            verified = true;
+            verifiedToken = data.token || 'session-token';
+          } else if (response.status === 401 || response.status === 429 || data.message) {
+            serverReturnedError = data.message || 'Incorrect password. Access denied.';
+          }
           break;
-        } else if (response.status === 401 || response.status === 429 || data.message) {
-          serverReturnedError = data.message || 'Incorrect password. Access denied.';
+        } catch {
+          if (attempt < maxAttempts - 1) {
+            setIsWakingServer(true);
+            await sleep(2000);
+            continue;
+          }
         }
-      } catch {
-        // Endpoint unreachable or timed out, attempt next target
+      }
+
+      if (verified || (!isLocal && reachedAnyServer)) {
+        break;
       }
     }
 
@@ -146,9 +182,9 @@ const LockModal = ({ isOpen, onClose, isUnlocked, onUnlockSuccess, onLock, onRes
         serverReturnedError ||
         (reachedAnyServer || clientMasterPass
           ? 'Incorrect password. Access denied.'
-          : (!remoteBackend && !isLocal
+          : (missingRemoteRoute && !remoteBackend && !isLocal
               ? 'Authentication server is not configured (VITE_BACKEND_URL is missing in the deployed build).'
-              : 'Cannot reach authentication server. If Render backend is sleeping, wait ~30-50s and try again (or verify CORS_ORIGIN on Render).'))
+              : 'Cannot reach authentication server. If Render backend is sleeping, wait ~30-50s and try again.'))
       );
       triggerShake();
     }
